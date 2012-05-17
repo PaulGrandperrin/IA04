@@ -24,7 +24,7 @@ public class MasterAgent extends jade.core.Agent {
 		}
 		
 		
-		addBehaviour(new PacketProcessingBhv(this,5000));
+		addBehaviour(new PacketProcessingBhv(this,1000));
 	}
 
 }

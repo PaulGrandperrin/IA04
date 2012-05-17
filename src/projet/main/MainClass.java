@@ -19,6 +19,11 @@ public class MainClass {
 			AgentContainer mainC = rt.createMainContainer(p);
 			AgentController masterAgent = mainC.createNewAgent("Master", "agents.MasterAgent", new Object[]{});
 			masterAgent.start();
+			
+			AgentController switch1 = mainC.createNewAgent("switch1", "agents.SwitchAgent", new Object[]{});
+			switch1.start();
+			
+			
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
