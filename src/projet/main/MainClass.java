@@ -1,13 +1,27 @@
 package projet.main;
 
+import jade.core.Profile;
+import jade.core.ProfileImpl;
+import jade.core.Runtime;
+import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
+
 public class MainClass {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println("hop");
+
+		try {
+			Runtime rt = Runtime.instance();
+			Profile p = new ProfileImpl("agent.properties");
+			AgentContainer mainC = rt.createMainContainer(p);
+			AgentController masterAgent = mainC.createNewAgent("Master", "agents.MasterAgent", new Object[]{});
+			masterAgent.start();
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }
