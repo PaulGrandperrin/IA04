@@ -1,7 +1,11 @@
 package behaviors;
 
+import java.util.Random;
+
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 public class PacketProcessingBhv extends WakerBehaviour {
 
@@ -12,4 +16,16 @@ public class PacketProcessingBhv extends WakerBehaviour {
 		System.out.println("Hi");
 	}
 
+	@Override
+	protected void onWake() {		 
+		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+		if (msg != null) {
+			answer(msg);
+		}
+	}
+	
+	private void answer(ACLMessage msg) {
+		
+		
+	}
 }
