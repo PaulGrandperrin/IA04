@@ -1,7 +1,5 @@
 package agents;
 
-import com.google.gson.Gson;
-
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -9,14 +7,18 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
-import projet.main.Message;
+import messages.AIDSerializer;
+import messages.Message;
 import behaviors.RoutageBhv;
 import behaviors.TopologyBhv;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class SwitchAgent extends Agent {
 	private static final long serialVersionUID = 7486410164729026372L;
 
-	private Gson gson;
+	private GsonBuilder gsonb;
 	
 	protected void setup() {
 //		DFAgentDescription dfd = new DFAgentDescription();
@@ -32,7 +34,8 @@ public class SwitchAgent extends Agent {
 //		}
 		
 	
-		gson = new Gson();
+		gsonb = new GsonBuilder();
+		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
 		addBehaviour(new RoutageBhv(this,1000));
 		addBehaviour(new TopologyBhv());
 		sendTo(getAID(), "trolol");
@@ -63,15 +66,16 @@ public class SwitchAgent extends Agent {
 	public void sendTo(AID dest, String msg) {
 		if (dest == null)
 			return;
-				
+		
+		Gson gson = gsonb.create();		
 		ACLMessage mess = new ACLMessage(ACLMessage.REQUEST);
 		
 		AID masterAid = searchMasterAgent();
 		mess.addReceiver(masterAid);
 		Message msgStruct = new Message();
-		msgStruct.dest = dest.toString();
+		msgStruct.dest = dest;
 		msgStruct.content = msg;
-		msgStruct.src = getAID().toString();
+		msgStruct.src = getAID();
 		mess.setContent(gson.toJson(msgStruct));
 		send(mess);
 		System.out.println("message envoyé");

@@ -1,12 +1,15 @@
 package behaviors;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import projet.main.Message;
+import messages.AIDSerializer;
+import messages.Message;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class PacketProcessingBhv extends WakerBehaviour {
 
@@ -28,11 +31,15 @@ public class PacketProcessingBhv extends WakerBehaviour {
 	}
 	
 	private void answer(ACLMessage msg) {		
-		Gson json = new Gson();
+		GsonBuilder gsonb = new GsonBuilder();
+		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
+		Gson json = gsonb.create();
+		
 		Message mess = json.fromJson(msg.getContent(), Message.class);
 
 		System.out.println("recu master:");		
 		System.out.println(mess.content);
+		System.out.println(mess.src);
 		
 	}
 }
