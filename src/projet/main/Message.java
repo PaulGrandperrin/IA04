@@ -1,6 +1,10 @@
 package projet.main;
 
+import jade.core.AID;
+
 public class Message {
-	private String dst,src,content;
+	//public AID dest, src;
+	public String dest, src;
+	public String content;
 
 }

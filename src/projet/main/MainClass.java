@@ -23,6 +23,9 @@ public class MainClass {
 			AgentController switch1 = mainC.createNewAgent("switch1", "agents.SwitchAgent", new Object[]{});
 			switch1.start();
 			
+			AgentController switch2 = mainC.createNewAgent("switch2", "agents.SwitchAgent", new Object[]{});
+			switch2.start();
+			
 			
 		} catch(Exception ex) {
 			ex.printStackTrace();

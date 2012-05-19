@@ -1,5 +1,6 @@
 package behaviors;
 
+import agents.SwitchAgent;
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -10,8 +11,7 @@ public class RoutageBhv extends WakerBehaviour {
 	private static final long serialVersionUID = 7836366259657542510L;
 
 	public RoutageBhv(Agent a, long timeout) {
-		super(a, timeout);
-		// TODO Auto-generated constructor stub
+		super(a, timeout);	
 	}
 	
 	@Override
@@ -21,6 +21,9 @@ public class RoutageBhv extends WakerBehaviour {
 		if (msg != null) {
 			answer(msg);
 		}
+		
+		SwitchAgent ag = (SwitchAgent) myAgent;
+		ag.sendTo(ag.getAID(), "trtrptokpo");
 		reset(1000);
 	}
 	

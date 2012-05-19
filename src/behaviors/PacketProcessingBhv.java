@@ -19,23 +19,20 @@ public class PacketProcessingBhv extends WakerBehaviour {
 
 	@Override
 	protected void onWake() {
-		
-		System.out.println("toc");
 		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+		
 		if (msg != null) {
 			answer(msg);
 		}
 		reset(1000);
 	}
 	
-	private void answer(ACLMessage msg) {
-		Gson json=new Gson();
-		Message mess=json.fromJson(msg.getContent(), Message.class);
-		
-		
-		
-		
-		System.out.println("recu master:");
+	private void answer(ACLMessage msg) {		
+		Gson json = new Gson();
+		Message mess = json.fromJson(msg.getContent(), Message.class);
+
+		System.out.println("recu master:");		
+		System.out.println(mess.content);
 		
 	}
 }
