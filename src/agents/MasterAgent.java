@@ -1,12 +1,15 @@
 package agents;
 
+import gui.NetworkGraphFrame;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.gui.GuiAgent;
+import jade.gui.GuiEvent;
 import behaviors.PacketProcessingBhv;
 
-public class MasterAgent extends jade.core.Agent {
+public class MasterAgent extends GuiAgent {
 	private static final long serialVersionUID = -6011994599868680168L;
 
 	
@@ -25,6 +28,13 @@ public class MasterAgent extends jade.core.Agent {
 		
 		
 		addBehaviour(new PacketProcessingBhv(this,1000));
+		NetworkGraphFrame gui = new NetworkGraphFrame(this);
+	}
+
+
+	protected void onGuiEvent(GuiEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
