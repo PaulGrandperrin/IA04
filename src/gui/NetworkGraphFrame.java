@@ -9,6 +9,7 @@ import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.samples.SimpleGraphDraw;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
@@ -27,10 +28,12 @@ public class NetworkGraphFrame extends JFrame {
 		g.addVertex((Integer)1);
 		g.addVertex((Integer)2);
 		g.addVertex((Integer)3);
+		g.addVertex((Integer)4);
 		// Add some edges. From above we defined these to be of type String
 		// Note that the default is for undirected edges.
 		g.addEdge("Edge-A", 1, 2); // Note that Java 1.5 auto-boxes primitives
 		g.addEdge("Edge-B", 2, 3);
+		g.addEdge("Edge-C", 2, 4);
 		
 		// The Layout<V, E> is parameterized by the vertex and edge types
 		Layout<Integer, String> layout = new CircleLayout<Integer, String>(g);
