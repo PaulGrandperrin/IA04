@@ -1,5 +1,10 @@
 package knowledgeBase;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -18,6 +23,22 @@ public class QueryKnowledgeBase {
 	String fileName;
 	public QueryKnowledgeBase(String filename) {
 		this.fileName = filename;
+	}
+	
+	public Map<String, List<String>> getLinks() {
+		
+		Map<String, List<String>> h = new HashMap<String, List<String>>();
+		
+		Graph<String, String> g = getGraph();
+		List<String> vertices = new ArrayList<String>(g.getVertices());
+		
+		for(int i = 0; i < vertices.size(); i++) {
+			String nom = vertices.get(i);
+			List<String> connections = new ArrayList<String>(g.getSuccessors(nom));
+			h.put(nom, connections);
+		}
+		
+		return h;
 	}
 	
 	public Graph<String, String> getGraph() {
@@ -48,7 +69,7 @@ public class QueryKnowledgeBase {
 			
 			graph.addEdge("Edge" + i, src, dest);
 			i++;
-			System.out.println(property.getLocalName() + " -> " + property2.getLocalName());
+			//System.out.println(property.getLocalName() + " -> " + property2.getLocalName());
 		}
 
 		qexec.close() ;
@@ -59,7 +80,8 @@ public class QueryKnowledgeBase {
 	
 	public static void main(String[] agrs) {
 		QueryKnowledgeBase q = new QueryKnowledgeBase("./network.n3");
-		q.getGraph();
+		//q.getGraph();
+		System.out.println(q.getLinks());
 	}
 
 }
