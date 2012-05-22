@@ -24,6 +24,7 @@ public class MasterAgent extends GuiAgent {
 
 	
 	protected void setup() {
+		//
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
