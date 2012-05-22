@@ -1,0 +1,4 @@
+# Topologie reseau
+@prefix reseau:  <http://utc.fr/projetIA04reseau#> .
+reseau:a reseau:linked_to reseau:b .
+reseau:b reseau:linked_to reseau:c .

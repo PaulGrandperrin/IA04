@@ -39,6 +39,8 @@ public class MasterAgent extends GuiAgent {
 		
 		
 		addBehaviour(new PacketProcessingBhv(this,1000));
+		queryKnowledgeBase("network.n3");
+		
 		NetworkGraphFrame gui = new NetworkGraphFrame(this);
 	}
 
@@ -50,7 +52,7 @@ public class MasterAgent extends GuiAgent {
 		
 		
 		//Query qu = QueryFactory.read("./requete_base_sur.rq");
-		String req1 = "PREFIX foaf: <http://xmlns.com/foaf/0.1/> select ?user where {?user lgdp:continent .}";
+		String req1 = "select ?machine where {?machine linked_to .}";
 		Query qu = QueryFactory.create(req1) ;
 		
 		QueryExecution qexec = QueryExecutionFactory.create(qu, model) ;
@@ -59,7 +61,7 @@ public class MasterAgent extends GuiAgent {
 		while(results.hasNext()){
 			QuerySolution sol = results.next() ;
 			//Resource property = sol.getResource("user") ;
-			Resource property = sol.getResource("chose") ;
+			Resource property = sol.getResource("machine") ;
 			System.out.println(property.getLocalName());
 		}
 

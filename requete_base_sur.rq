@@ -1,0 +1,3 @@
+PREFIX reseau:  <http://utc.fr/projetIA04reseau#>
+
+SELECT ?machine ?autre_machine where {?machine reseau:linked_to ?autre_machine.}
