@@ -2,3 +2,5 @@
 @prefix reseau:  <http://utc.fr/projetIA04reseau#> .
 reseau:a reseau:linked_to reseau:b .
 reseau:b reseau:linked_to reseau:c .
+reseau:c reseau:linked_to reseau:d .
+reseau:d reseau:linked_to reseau:a .

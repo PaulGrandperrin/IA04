@@ -39,35 +39,10 @@ public class MasterAgent extends GuiAgent {
 		
 		
 		addBehaviour(new PacketProcessingBhv(this,1000));
-		queryKnowledgeBase("network.n3");
 		
 		NetworkGraphFrame gui = new NetworkGraphFrame(this);
 	}
 
-
-	protected void queryKnowledgeBase(String filename) {
-		OntModel model = ModelFactory.createOntologyModel();
-		model.read("file:" + filename, null, "N3");
-		//model.write(System.out);
-		
-		
-		//Query qu = QueryFactory.read("./requete_base_sur.rq");
-		String req1 = "select ?machine where {?machine linked_to .}";
-		Query qu = QueryFactory.create(req1) ;
-		
-		QueryExecution qexec = QueryExecutionFactory.create(qu, model) ;
-		ResultSet results = qexec.execSelect() ;
-		System.out.println(results.hasNext());
-		while(results.hasNext()){
-			QuerySolution sol = results.next() ;
-			//Resource property = sol.getResource("user") ;
-			Resource property = sol.getResource("machine") ;
-			System.out.println(property.getLocalName());
-		}
-
-		qexec.close() ;
-
-	}
 	
 	protected void onGuiEvent(GuiEvent arg0) {
 		// TODO Auto-generated method stub
