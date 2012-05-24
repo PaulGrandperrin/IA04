@@ -5,15 +5,12 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 
 import knowledgeBase.QueryKnowledgeBase;
-
 import agents.MasterAgent;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseMultigraph;
-import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.samples.SimpleGraphDraw;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 
 @SuppressWarnings("serial")
 public class NetworkGraphFrame extends JFrame {
@@ -32,7 +29,7 @@ public class NetworkGraphFrame extends JFrame {
 		// The BasicVisualizationServer<V,E> is parameterized by the edge types
 		BasicVisualizationServer<String,String> vv = new BasicVisualizationServer<String,String>(layout);
 		vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
-
+		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
 		this.getContentPane().add(vv);
 		this.pack();
 		this.setTitle("Graphe basique");
