@@ -21,6 +21,8 @@ import edu.uci.ics.jung.graph.SparseMultigraph;
 public class QueryKnowledgeBase {
 
 	String fileName;
+	Map<String, KBMachine> machineMap = new HashMap<String, KBMachine>(); 
+	
 	public QueryKnowledgeBase(String filename) {
 		this.fileName = filename;
 	}
@@ -40,6 +42,11 @@ public class QueryKnowledgeBase {
 		
 		return h;
 	}
+	
+	public Map<String, KBMachine> getMap() {
+		return machineMap;
+	}	
+	
 	
 	public Graph<String, String> getGraph() {
 		Graph<String, String> graph = new SparseMultigraph<String, String>();
@@ -61,11 +68,17 @@ public class QueryKnowledgeBase {
 			String src = property.getLocalName();
 			String dest = property2.getLocalName();
 			
-			if(!graph.containsVertex(src))
-				graph.addVertex(src);
 			
-			if(!graph.containsVertex(dest))
+			
+			if(!graph.containsVertex(src)) {
+				graph.addVertex(src);
+				machineMap.put(src, new KBMachine(src));
+			}
+			
+			if(!graph.containsVertex(dest)) {
 				graph.addVertex(dest);
+				machineMap.put(dest, new KBMachine(dest));
+			}
 			
 			graph.addEdge("Edge" + i, src, dest);
 			i++;
