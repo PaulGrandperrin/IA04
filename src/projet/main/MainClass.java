@@ -49,15 +49,16 @@ public class MainClass {
 		 * Tchao bonsoir
 		 */
 		
+		AgentController switch1 = ac.createNewAgent("switch1", "agents.SwitchAgent", new Object[]{});
+		switch1.start();
 		
-//		Map<AID, List<AID>> a = new HashMap<AID, List<AID>>();
+		Map<AID, List<AID>> a = new HashMap<AID, List<AID>>();
 //		for(AID key : a.keySet()){ 
 //			a.put(key,new ArrayList<AID>());
 //		}
 		
-		AgentController switch1 = ac.createNewAgent("switch1", "agents.SwitchAgent", new Object[]{});
-		switch1.start();
-		return null;
+		
+		return a;
 		
 	
 	}

@@ -18,7 +18,7 @@ import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 @SuppressWarnings("serial")
 public class NetworkGraphFrame extends JFrame {
 	MasterAgent ag;
-	
+
 	public NetworkGraphFrame(MasterAgent agent) {
 		super();
 		this.setSize(640, 480);
@@ -32,7 +32,7 @@ public class NetworkGraphFrame extends JFrame {
 		// The BasicVisualizationServer<V,E> is parameterized by the edge types
 		BasicVisualizationServer<String,String> vv = new BasicVisualizationServer<String,String>(layout);
 		vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
-		
+
 		this.getContentPane().add(vv);
 		this.pack();
 		this.setTitle("Graphe basique");

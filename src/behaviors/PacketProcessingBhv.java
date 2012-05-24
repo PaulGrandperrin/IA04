@@ -23,23 +23,23 @@ public class PacketProcessingBhv extends WakerBehaviour {
 	@Override
 	protected void onWake() {
 		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-		
+
 		if (msg != null) {
 			answer(msg);
 		}
 		reset(1000);
 	}
-	
-	private void answer(ACLMessage msg) {		
+
+	private void answer(ACLMessage msg) {
 		GsonBuilder gsonb = new GsonBuilder();
 		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
 		Gson json = gsonb.create();
-		
+
 		Message mess = json.fromJson(msg.getContent(), Message.class);
 
-		System.out.println("recu master:");		
+		System.out.println("recu master:");
 		System.out.println(mess.content);
 		System.out.println(mess.src);
-		
+
 	}
 }
