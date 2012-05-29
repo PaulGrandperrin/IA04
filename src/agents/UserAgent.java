@@ -62,23 +62,6 @@ public class UserAgent extends Agent {
 		return masterAgent;
 	}
 
-	public void sendTo(AID dest, String msg) {
-		if (dest == null)
-			return;
-
-		Gson gson = gsonb.create();
-		ACLMessage mess = new ACLMessage(ACLMessage.REQUEST);
-
-		AID masterAid = searchMasterAgent();
-		mess.addReceiver(masterAid);
-		ProtoPaquet msgStruct = new ProtoPaquet();
-		msgStruct.dest = dest;
-		msgStruct.content = msg;
-		msgStruct.src = getAID();
-		mess.setContent(gson.toJson(msgStruct));
-		send(mess);
-		System.out.println("message envoyé");
-	}
 
 	public List<String> getLinkTable() {
 		return LinkTable;
