@@ -1,15 +1,28 @@
 package agents;
 
+import java.util.List;
+
 import jade.core.AID;
+import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
+import messages.AIDSerializer;
+import messages.ProtoPaquet;
 import behaviors.BhvSwitchInfoLink;
+import behaviors.BhvSwitchPaquet;
 
-public class SwitchAgent extends BaseAgent {
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+public class SwitchAgent extends Agent {
 	private static final long serialVersionUID = 7486410164729026372L;
 
+	private GsonBuilder gsonb;
+
+	private List<String> LinkTable;
 
 	protected void setup() {
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -25,6 +38,7 @@ public class SwitchAgent extends BaseAgent {
 		}
 
 		addBehaviour(new BhvSwitchInfoLink(this));
+		addBehaviour(new BhvSwitchPaquet(this));
 	}
 
 	public AID searchMasterAgent() {
@@ -67,5 +81,18 @@ public class SwitchAgent extends BaseAgent {
 //		System.out.println("message envoyé");
 //	}
 
+	public List<String> getLinkTable() {
+		return LinkTable;
+	}
+
+	public void setLinkTable(List<String> linkTable) {
+		System.out.println("LinkTable of agent "+getLocalName()+"changed to ");
+		for (String s:LinkTable)
+		{
+			System.out.print(s+",");
+		}
+		System.out.println();
+		LinkTable = linkTable;
+	}
 
 }
