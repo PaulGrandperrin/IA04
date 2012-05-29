@@ -3,6 +3,7 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Paint;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -12,6 +13,7 @@ import knowledgeBase.QueryKnowledgeBase;
 import org.apache.commons.collections15.Transformer;
 
 import agents.MasterAgent;
+import behaviors.GUIUpdateBehaviour;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
@@ -23,6 +25,8 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 public class NetworkGraphFrame extends JFrame {
 	MasterAgent ag;
 
+	public VisualizationViewer<String,String> vv;
+	
 	public NetworkGraphFrame(MasterAgent agent) {
 		super();
 		this.setSize(640, 480);
@@ -34,11 +38,10 @@ public class NetworkGraphFrame extends JFrame {
 		Layout<String, String> layout = new CircleLayout<String, String>(g);
 		layout.setSize(new Dimension(300,300)); // sets the initial size of the space
 		// The BasicVisualizationServer<V,E> is parameterized by the edge types
-		VisualizationViewer<String,String> vv = new VisualizationViewer<String,String>(layout);
+		vv = new VisualizationViewer<String,String>(layout);
 		
 		Transformer<String,Paint> vertexPaint = new Transformer<String,Paint>() {
 			public Paint transform(String s) {
-				System.out.println(s);
 				if (kb.getMachineMap().get(s).machineType == KBMachine.type.USER) {
 					return Color.GREEN;	
 				}
@@ -46,10 +49,21 @@ public class NetworkGraphFrame extends JFrame {
 			
 			}
 		};
+		
+		Transformer<String,Paint> edgePaint = new Transformer<String,Paint>() {
+			public Paint transform(String s) {
+				if(new Random().nextBoolean()) {
+					return Color.red;
+				} else
+					return Color.black;
+			}
+		};
 		vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint);
 		
 		vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+		vv.getRenderContext().setEdgeDrawPaintTransformer(edgePaint);
+		
 		/*
 		DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
 		gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
@@ -61,5 +75,8 @@ public class NetworkGraphFrame extends JFrame {
 		this.getContentPane().add(vv);
 		this.pack();
 		this.setTitle("Graphe basique");
+
 	}
+	
+	
 }

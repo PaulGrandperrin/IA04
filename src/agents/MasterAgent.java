@@ -29,6 +29,7 @@ import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
 import behaviors.BhvSwitchPaquet;
+import behaviors.GUIUpdateBehaviour;
 
 public class MasterAgent extends GuiAgent {
 	private static final long serialVersionUID = -6011994599868680168L;
@@ -59,7 +60,9 @@ public class MasterAgent extends GuiAgent {
 		Object[] args = getArguments();
 		graphAgent=(Map<String, List<String>>) args[0];
 
-
+		
+		addBehaviour(new GUIUpdateBehaviour(this, 1000, gui.vv));
+		
 		gsonb = new GsonBuilder();
 
 		Gson gson = gsonb.create();
