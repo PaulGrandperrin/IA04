@@ -62,30 +62,30 @@ public class SwitchAgent extends Agent {
 		return masterAgent;
 	}
 
-	public void sendTo(AID dest, String msg) {
-		if (dest == null)
-			return;
-
-		Gson gson = gsonb.create();
-		ACLMessage mess = new ACLMessage(ACLMessage.REQUEST);
-
-		AID masterAid = searchMasterAgent();
-		mess.addReceiver(masterAid);
-		ProtoPaquet msgStruct = new ProtoPaquet();
-		msgStruct.dest = dest;
-		msgStruct.content = msg;
-		msgStruct.src = getAID();
-		mess.setContent(gson.toJson(msgStruct));
-		send(mess);
-		System.out.println("message envoyé");
-	}
+//	public void sendTo(AID dest, String msg) {
+//		if (dest == null)
+//			return;
+//
+//		Gson gson = gsonb.create();
+//		ACLMessage mess = new ACLMessage(ACLMessage.REQUEST);
+//
+//		AID masterAid = searchMasterAgent();
+//		mess.addReceiver(masterAid);
+//		ProtoPaquet msgStruct = new ProtoPaquet();
+//		msgStruct.dest = dest;
+//		msgStruct.content = msg;
+//		msgStruct.src = getAID();
+//		mess.setContent(gson.toJson(msgStruct));
+//		send(mess);
+//		System.out.println("message envoyé");
+//	}
 
 	public List<String> getLinkTable() {
 		return LinkTable;
 	}
 
 	public void setLinkTable(List<String> linkTable) {
-		System.out.println("LinkTable of agent "+getLocalName()+" changed to ");
+		System.out.println("LinkTable of SwitchAgent "+getLocalName()+" changed to ");
 		for (String s:linkTable)
 		{
 			System.out.print(s+",");
