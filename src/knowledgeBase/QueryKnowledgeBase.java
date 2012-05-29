@@ -22,6 +22,7 @@ public class QueryKnowledgeBase {
 
 	String fileName;
 	Map<String, KBMachine> machineMap = new HashMap<String, KBMachine>(); 
+	Graph<String, String> graph;
 	
 	public QueryKnowledgeBase(String filename) {
 		this.fileName = filename;
@@ -31,7 +32,7 @@ public class QueryKnowledgeBase {
 
 		Map<String, List<String>> h = new HashMap<String, List<String>>();
 
-		Graph<String, String> g = getGraph();
+		Graph<String, String> g = graph;
 		List<String> vertices = new ArrayList<String>(g.getVertices());
 
 		for(int i = 0; i < vertices.size(); i++) {
@@ -48,7 +49,7 @@ public class QueryKnowledgeBase {
 	}	
 	
 
-	public Graph<String, String> getGraph() {
+	public Graph<String, String> computeGraph() {
 		Graph<String, String> graph = new SparseMultigraph<String, String>();
 
 		OntModel model = ModelFactory.createOntologyModel();
@@ -85,6 +86,30 @@ public class QueryKnowledgeBase {
 
 		qexec.close() ;
 
+		qu = QueryFactory.read("requete_type_agent.rq");
+
+		qexec = QueryExecutionFactory.create(qu, model) ;
+		results = qexec.execSelect() ;
+
+		i = 0;
+		while(results.hasNext()){
+			QuerySolution sol = results.next() ;
+			Resource property = sol.getResource("machine");
+			Resource property2 = sol.getResource("type") ;
+
+			String mach = property.getLocalName();
+			String type = property2.getLocalName();
+			
+			if(type.equals("machine")) {
+				machineMap.get(mach).machineType = KBMachine.type.SWITCH;
+			} else {
+				machineMap.get(mach).machineType =  KBMachine.type.USER;
+			}
+			i++;
+			//System.out.println(property.getLocalName() + " -> " + property2.getLocalName());
+		}
+
+		qexec.close() ;
 		return graph;
 	}
 
@@ -93,6 +118,14 @@ public class QueryKnowledgeBase {
 		QueryKnowledgeBase q = new QueryKnowledgeBase("./network.n3");
 		//q.getGraph();
 		System.out.println(q.getLinks());
+	}
+
+	public Graph<String, String> getGraph() {
+		return graph;
+	}
+
+	public Map<String, KBMachine> getMachineMap() {
+		return machineMap;
 	}
 
 }

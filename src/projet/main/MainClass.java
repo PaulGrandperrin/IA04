@@ -22,6 +22,8 @@ import java.util.Map;
 
 import edu.uci.ics.jung.graph.Graph;
 
+import knowledgeBase.KBMachine;
+import knowledgeBase.KBMachine.type;
 import knowledgeBase.QueryKnowledgeBase;
 
 public class MainClass {
@@ -65,13 +67,23 @@ public class MainClass {
 		
 		QueryKnowledgeBase kb = new QueryKnowledgeBase(path);
 		Graph<String, String> g = kb.getGraph();
-
+		Map<String, KBMachine> machineMap = kb.getMachineMap();
+		
 		List<String> vertices = new ArrayList<String>(g.getVertices());
 
 		for(int i = 0; i < vertices.size(); i++) {
 			String nom = vertices.get(i);
-			AgentController switchAgent = ac.createNewAgent(nom, "agents.SwitchAgent", new Object[]{});
-			switchAgent.start();
+			
+			if(!machineMap.containsKey(nom))
+				continue;
+			
+			AgentController agent;
+			if(machineMap.get(nom).machineType == KBMachine.type.SWITCH)
+				agent = ac.createNewAgent(nom, "agents.SwitchAgent", new Object[]{});
+			else
+				agent = ac.createNewAgent(nom, "agents.UserAgent", new Object[]{});
+			
+			agent.start();
 		}
 
 		return kb.getLinks();

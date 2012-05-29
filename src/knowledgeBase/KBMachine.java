@@ -3,7 +3,8 @@ package knowledgeBase;
 public class KBMachine {
 	
 	private String name;
-	
+	public enum type {SWITCH, USER };
+	public type machineType;
 	
 	public KBMachine(String name) {
 		this.name = name;

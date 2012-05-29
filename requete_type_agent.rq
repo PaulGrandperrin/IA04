@@ -1,0 +1,3 @@
+PREFIX reseau:  <http://utc.fr/projetIA04reseau#>
+
+SELECT ?machine ?type where {?machine is:a ?type.}
