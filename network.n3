@@ -1,13 +1,16 @@
 # Topologie reseau
 @prefix reseau:  <http://utc.fr/projetIA04reseau#> .
 reseau:a 
-	reseau:linked_to reseau:b; is_a: machine .
+	reseau:linked_to reseau:b; reseau:is_a reseau:machine .
 	
 reseau:b
-	reseau:linked_to reseau:c; is_a: machine .
+	reseau:linked_to reseau:c; reseau:is_a reseau:machine .
 	
 reseau:c
-	reseau:linked_to reseau:d; is_a: machine .
+	reseau:linked_to reseau:d; reseau:is_a reseau:machine .
 	
 reseau:d
-	reseau:linked_to reseau:a; is_a: machine .
+	reseau:linked_to reseau:a; reseau:is_a reseau:machine .
+
+reseau:user_a
+	reseau:linked_to reseau:a; reseau:is_a reseau:user .

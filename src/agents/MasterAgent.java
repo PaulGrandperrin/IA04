@@ -64,7 +64,7 @@ public class MasterAgent extends GuiAgent {
 
 		Gson gson = gsonb.create();
 		for(String agentName : graphAgent.keySet()){
-			AID agent=getSwitchAID(agentName);
+			AID agent = getAIDByName(agentName);
 			ACLMessage jadeMsg = new ACLMessage(ACLMessage.INFORM);
 			jadeMsg.addReceiver(agent);
 			ProtoInfoLink infoLink = new ProtoInfoLink();
@@ -100,4 +100,20 @@ public class MasterAgent extends GuiAgent {
 		}
 	}
 
+	private AID getAIDByName(String name)
+	{
+		DFAgentDescription dfd = new DFAgentDescription();
+		ServiceDescription sd  = new ServiceDescription();
+		sd.setName(name);
+		dfd.addServices(sd);
+		
+		try {
+			DFAgentDescription[] result = DFService.search(this, dfd);
+			return result[0].getName();
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

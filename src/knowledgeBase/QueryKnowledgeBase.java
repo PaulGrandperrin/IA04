@@ -22,10 +22,11 @@ public class QueryKnowledgeBase {
 
 	String fileName;
 	Map<String, KBMachine> machineMap = new HashMap<String, KBMachine>(); 
-	Graph<String, String> graph;
+	Graph<String, String> graph = new SparseMultigraph<String, String>();
 	
 	public QueryKnowledgeBase(String filename) {
 		this.fileName = filename;
+		computeGraph();
 	}
 
 	public Map<String, List<String>> getLinks() {
@@ -50,7 +51,7 @@ public class QueryKnowledgeBase {
 	
 
 	public Graph<String, String> computeGraph() {
-		Graph<String, String> graph = new SparseMultigraph<String, String>();
+		graph = new SparseMultigraph<String, String>();
 
 		OntModel model = ModelFactory.createOntologyModel();
 		model.read("file:"+fileName, null, "N3");
