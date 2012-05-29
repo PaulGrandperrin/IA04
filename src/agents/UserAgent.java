@@ -17,7 +17,7 @@ import behaviors.BhvSwitchIA;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class UserAgent extends Agent {
+public class UserAgent extends BaseAgent {
 
 
 	private GsonBuilder gsonb;

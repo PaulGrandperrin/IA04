@@ -10,7 +10,7 @@ import java.util.Enumeration;
 
 import javax.media.j3d.Behavior;
 
-import agents.SwitchAgent;
+import agents.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -40,7 +40,7 @@ public class BhvSwitchInfoLink extends CyclicBehaviour {
 			Gson gson = gsonb.create();
 
 			ProtoInfoLink infoLink=gson.fromJson(msg.getContent(), ProtoInfoLink.class);
-			((SwitchAgent)myAgent).setLinkTable(infoLink.links);
+			((BaseAgent)myAgent).setLinkTable(infoLink.links);
 
 			System.out.println("Je suis un switch et j'ai recu ma liste de liens :D je suis content");
 		}
