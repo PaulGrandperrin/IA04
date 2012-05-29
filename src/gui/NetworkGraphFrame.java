@@ -1,10 +1,16 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Paint;
 
 import javax.swing.JFrame;
 
+import knowledgeBase.KBMachine;
 import knowledgeBase.QueryKnowledgeBase;
+
+import org.apache.commons.collections15.Transformer;
+
 import agents.MasterAgent;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -22,13 +28,25 @@ public class NetworkGraphFrame extends JFrame {
 		this.setSize(640, 480);
 		this.setVisible(true);
 		this.ag = agent;
-		QueryKnowledgeBase kb = new QueryKnowledgeBase("./network.n3");
+		final QueryKnowledgeBase kb = new QueryKnowledgeBase("./network.n3");
 		Graph<String, String> g = kb.getGraph();
 		// The Layout<V, E> is parameterized by the vertex and edge types
 		Layout<String, String> layout = new CircleLayout<String, String>(g);
 		layout.setSize(new Dimension(300,300)); // sets the initial size of the space
 		// The BasicVisualizationServer<V,E> is parameterized by the edge types
 		VisualizationViewer<String,String> vv = new VisualizationViewer<String,String>(layout);
+		
+		Transformer<String,Paint> vertexPaint = new Transformer<String,Paint>() {
+			public Paint transform(String s) {
+				System.out.println(s);
+				if (kb.getMachineMap().get(s).machineType == KBMachine.type.USER) {
+					return Color.GREEN;	
+				}
+				return Color.RED;
+			
+			}
+		};
+		vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint);
 		
 		vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
