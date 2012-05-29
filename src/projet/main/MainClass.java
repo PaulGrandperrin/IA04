@@ -4,14 +4,25 @@ import jade.core.AID;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+
+import edu.uci.ics.jung.graph.Graph;
+
+import knowledgeBase.QueryKnowledgeBase;
 
 public class MainClass {
 
@@ -26,7 +37,7 @@ public class MainClass {
 			AgentContainer mainC = rt.createMainContainer(p);
 			
 			//Lancement des agents switch
-			Map<AID, List<AID>> graphAgent=createSwitchsFromOntologie(mainC,"/mesCouilles.txt");
+			Map<String, List<String>> graphAgent=createSwitchsFromOntologie(mainC,"./network.n3");
 			
 			
 			//Lancement de l'agent master avec en argument la liste des agents switch+ leurs liens.
@@ -40,25 +51,30 @@ public class MainClass {
 	}
 	
 	
-	private static Map<AID, List<AID>> createSwitchsFromOntologie(AgentContainer ac,String path) throws StaleProxyException
+	private static Map<String, List<String>> createSwitchsFromOntologie(AgentContainer ac,String path) throws StaleProxyException
 	{
-		/*
-		 * Ici, vous êtes priés de lire le fichier d'ontologie, de construire et de lancer les agents.
-		 * Et en code de retour vous renvoyez la liste des liens des agents.
-		 * Merci Bien
-		 * Tchao bonsoir
-		 */
 		
+		/*
 		AgentController switch1 = ac.createNewAgent("switch1", "agents.SwitchAgent", new Object[]{});
 		switch1.start();
-		
-		Map<AID, List<AID>> a = new HashMap<AID, List<AID>>();
+		*/
+		//Map<AID, List<AID>> a = new HashMap<AID, List<AID>>();
 //		for(AID key : a.keySet()){ 
 //			a.put(key,new ArrayList<AID>());
 //		}
 		
-		
-		return a;
+		QueryKnowledgeBase kb = new QueryKnowledgeBase(path);
+		Graph<String, String> g = kb.getGraph();
+
+		List<String> vertices = new ArrayList<String>(g.getVertices());
+
+		for(int i = 0; i < vertices.size(); i++) {
+			String nom = vertices.get(i);
+			AgentController switchAgent = ac.createNewAgent(nom, "agents.SwitchAgent", new Object[]{});
+			switchAgent.start();
+		}
+
+		return kb.getLinks();
 		
 	
 	}

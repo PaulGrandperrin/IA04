@@ -10,10 +10,9 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import messages.AIDSerializer;
-import messages.Message;
+import messages.ProtoPaquet;
 import behaviors.BhvSwitchInfoLink;
-import behaviors.RoutageBhv;
-import behaviors.TopologyBhv;
+import behaviors.BhvSwitchIA;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,20 +22,20 @@ public class SwitchAgent extends Agent {
 
 	private GsonBuilder gsonb;
 
-	private List LinkTable;
+	private List<String> LinkTable;
 
 	protected void setup() {
-//		DFAgentDescription dfd = new DFAgentDescription();
-//		dfd.setName(getAID());
-//		ServiceDescription sd = new ServiceDescription();
-//		sd.setType("MasterAgent");
-//		sd.setName(getLocalName());
-//		dfd.addServices(sd);
-//		try {
-//			DFService.register(this, dfd);
-//		} catch (FIPAException e) {
-//			e.printStackTrace();
-//		}
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.setName(getAID());
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("SwitchAgent");
+		sd.setName(getLocalName());
+		dfd.addServices(sd);
+		try {
+			DFService.register(this, dfd);
+		} catch (FIPAException e) {
+			e.printStackTrace();
+		}
 
 		addBehaviour(new BhvSwitchInfoLink(this));
 	}
@@ -72,7 +71,7 @@ public class SwitchAgent extends Agent {
 
 		AID masterAid = searchMasterAgent();
 		mess.addReceiver(masterAid);
-		Message msgStruct = new Message();
+		ProtoPaquet msgStruct = new ProtoPaquet();
 		msgStruct.dest = dest;
 		msgStruct.content = msg;
 		msgStruct.src = getAID();
@@ -81,11 +80,17 @@ public class SwitchAgent extends Agent {
 		System.out.println("message envoyé");
 	}
 
-	public List getLinkTable() {
+	public List<String> getLinkTable() {
 		return LinkTable;
 	}
 
-	public void setLinkTable(List linkTable) {
+	public void setLinkTable(List<String> linkTable) {
+		System.out.println("LinkTable of agent "+getLocalName()+" changed to ");
+		for (String s:linkTable)
+		{
+			System.out.print(s+",");
+		}
+		System.out.println();
 		LinkTable = linkTable;
 	}
 

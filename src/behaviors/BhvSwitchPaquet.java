@@ -6,16 +6,16 @@ import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import messages.AIDSerializer;
-import messages.Message;
+import messages.ProtoPaquet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class PacketProcessingBhv extends WakerBehaviour {
+public class BhvSwitchPaquet extends WakerBehaviour {
 
 	private static final long serialVersionUID = -8645230578588902973L;
 
-	public PacketProcessingBhv(Agent a, long timeout) {
+	public BhvSwitchPaquet(Agent a, long timeout) {
 		super(a, timeout);
 		System.out.println("Hi");
 	}
@@ -35,7 +35,7 @@ public class PacketProcessingBhv extends WakerBehaviour {
 		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
 		Gson json = gsonb.create();
 
-		Message mess = json.fromJson(msg.getContent(), Message.class);
+		ProtoPaquet mess = json.fromJson(msg.getContent(), ProtoPaquet.class);
 
 		System.out.println("recu master:");
 		System.out.println(mess.content);

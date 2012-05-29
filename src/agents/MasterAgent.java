@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import messages.AIDSerializer;
-import messages.Message;
+import messages.ProtoPaquet;
 import messages.ProtoInfoLink;
 
 import com.google.gson.Gson;
@@ -28,15 +28,16 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
-import behaviors.PacketProcessingBhv;
+import behaviors.BhvSwitchPaquet;
 
 public class MasterAgent extends GuiAgent {
 	private static final long serialVersionUID = -6011994599868680168L;
 
 	private GsonBuilder gsonb;
-
+	private Map<String, List<String>> graphAgent;
+	
+	@SuppressWarnings("unchecked")
 	protected void setup() {
-		//
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
@@ -56,21 +57,21 @@ public class MasterAgent extends GuiAgent {
 
 		//Envoie à tous les agents les infos de connections
 		Object[] args = getArguments();
-		Map<AID, List<AID>> graphAgent=(Map<AID, List<AID>>) args[0];
+		graphAgent=(Map<String, List<String>>) args[0];
 
 
 		gsonb = new GsonBuilder();
-		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
 
 		Gson gson = gsonb.create();
-		for(AID agent : graphAgent.keySet()){
+		for(String agentName : graphAgent.keySet()){
+			AID agent=getSwitchAID(agentName);
 			ACLMessage jadeMsg = new ACLMessage(ACLMessage.INFORM);
 			jadeMsg.addReceiver(agent);
 			ProtoInfoLink infoLink = new ProtoInfoLink();
-			infoLink.links = graphAgent.get(agent);
+			infoLink.links = graphAgent.get(agentName);
 			jadeMsg.setContent(gson.toJson(infoLink));
 			send(jadeMsg);
-			System.out.println("InfoLink envoyé");
+			System.out.println("InfoLink envoyé à "+agentName);
 		}
 
 	}
@@ -79,6 +80,24 @@ public class MasterAgent extends GuiAgent {
 	protected void onGuiEvent(GuiEvent arg0) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	private AID getSwitchAID(String name)
+	{
+		DFAgentDescription dfd = new DFAgentDescription();
+        ServiceDescription sd  = new ServiceDescription();
+        sd.setType( "SwitchAgent" );
+        sd.setName(name);
+        dfd.addServices(sd);
+        
+        try {
+			DFAgentDescription[] result = DFService.search(this, dfd);
+			return result[0].getName();
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

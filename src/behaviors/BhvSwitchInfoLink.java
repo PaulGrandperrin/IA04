@@ -35,7 +35,7 @@ public class BhvSwitchInfoLink extends CyclicBehaviour {
 
 	@Override
 	public void action() {
-		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
 		if (msg != null) {
 			Gson gson = gsonb.create();
 
