@@ -79,6 +79,7 @@ public class MainClass {
 				continue;
 			
 			AgentController agent;
+			
 			if(machineMap.get(nom).machineType == KBMachine.type.SWITCH)
 				agent = ac.createNewAgent(nom, "agents.SwitchAgent", new Object[]{});
 			else

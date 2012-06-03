@@ -24,13 +24,7 @@ public abstract class BaseAgent extends Agent {
 		return LinkTable;
 	}
 
-	public void setLinkTable(List<String> linkTable) {
-		System.out.println("LinkTable of SwitchAgent "+getLocalName()+" changed to ");
-		for (String s:linkTable)
-		{
-			System.out.print(s+",");
-		}
-		System.out.println();
+	public void setLinkTable(List<String> linkTable) {				
 		LinkTable = linkTable;
 	}
 	

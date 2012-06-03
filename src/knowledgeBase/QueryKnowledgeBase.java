@@ -65,7 +65,7 @@ public class QueryKnowledgeBase {
 		while(results.hasNext()){
 			QuerySolution sol = results.next() ;
 			Resource property = sol.getResource("machine");
-			Resource property2 = sol.getResource("autre_machine") ;
+			Resource property2 = sol.getResource("autre_machine") ;			
 
 			String src = property.getLocalName();
 			String dest = property2.getLocalName();
@@ -97,14 +97,17 @@ public class QueryKnowledgeBase {
 			QuerySolution sol = results.next() ;
 			Resource property = sol.getResource("machine");
 			Resource property2 = sol.getResource("type") ;
+			Resource pty3 = sol.getResource("locuteur") ;
 
 			String mach = property.getLocalName();
 			String type = property2.getLocalName();
+			String locuteur = pty3.getLocalName();
 			
 			if(type.equals("machine")) {
 				machineMap.get(mach).machineType = KBMachine.type.SWITCH;
 			} else {
-				machineMap.get(mach).machineType =  KBMachine.type.USER;
+				machineMap.get(mach).machineType =  KBMachine.type.USER;			
+				machineMap.get(mach).interlocuteur = locuteur;
 			}
 			i++;
 			//System.out.println(property.getLocalName() + " -> " + property2.getLocalName());

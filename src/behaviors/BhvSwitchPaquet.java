@@ -43,7 +43,10 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 	@Override
 	public void action() {
 		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-		String sender=msg.getSender().getLocalName();
+		if (msg == null)
+			return;
+		
+		String sender = msg.getSender().getLocalName();
 		
 		System.out.println("Je suis "+ myAgent.getLocalName()+ ", je viens de recevoir un msg, et je vais l'envoyer à tt le monde :D");
 		

@@ -44,8 +44,9 @@ public class NetworkGraphFrame extends JFrame {
 			public Paint transform(String s) {
 				if (kb.getMachineMap().get(s).machineType == KBMachine.type.USER) {
 					return Color.GREEN;	
+				} else {
+					return Color.RED;
 				}
-				return Color.RED;
 			
 			}
 		};

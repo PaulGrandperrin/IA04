@@ -74,7 +74,6 @@ public class MasterAgent extends GuiAgent {
 			infoLink.links = graphAgent.get(agentName);
 			jadeMsg.setContent(gson.toJson(infoLink));
 			send(jadeMsg);
-			System.out.println("InfoLink envoyé à "+agentName);
 		}
 
 	}

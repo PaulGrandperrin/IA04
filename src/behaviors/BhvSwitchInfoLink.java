@@ -26,8 +26,6 @@ public class BhvSwitchInfoLink extends CyclicBehaviour {
 	public BhvSwitchInfoLink(Agent a) {
 		super();
 		myAgent=a;
-		System.out.println("Un switch s'éveille :D");
-
 		gsonb = new GsonBuilder();
 		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
 
@@ -39,10 +37,8 @@ public class BhvSwitchInfoLink extends CyclicBehaviour {
 		if (msg != null) {
 			Gson gson = gsonb.create();
 
-			ProtoInfoLink infoLink=gson.fromJson(msg.getContent(), ProtoInfoLink.class);
+			ProtoInfoLink infoLink = gson.fromJson(msg.getContent(), ProtoInfoLink.class);			
 			((BaseAgent)myAgent).setLinkTable(infoLink.links);
-
-			System.out.println("Je suis un switch et j'ai recu ma liste de liens :D je suis content");
 		}
 	}
 

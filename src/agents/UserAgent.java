@@ -62,19 +62,4 @@ public class UserAgent extends BaseAgent {
 		return masterAgent;
 	}
 
-
-	public List<String> getLinkTable() {
-		return LinkTable;
-	}
-
-	public void setLinkTable(List<String> linkTable) {
-		System.out.println("LinkTable of UserAgent "+getLocalName()+" changed to ");
-		for (String s:linkTable)
-		{
-			System.out.print(s+",");
-		}
-		System.out.println();
-		LinkTable = linkTable;
-	}
-
 }
