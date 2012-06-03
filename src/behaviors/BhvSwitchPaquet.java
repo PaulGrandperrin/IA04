@@ -43,22 +43,22 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 	@Override
 	public void action() {
 		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-		if (msg == null)
-			return;
-		
-		String sender = msg.getSender().getLocalName();
-		
-		System.out.println("Je suis "+ myAgent.getLocalName()+ ", je viens de recevoir un msg, et je vais l'envoyer à tt le monde :D");
-		
-		for(String dst:((SwitchAgent)myAgent).getLinkTable())
+		if(msg!=null)
 		{
-			if(dst.equals(sender)) continue;
+			String sender=msg.getSender().getLocalName();
 			
-			ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.INFORM);
-			jadeMsgInit.addReceiver(getSwitchAID(dst));
+			System.out.println("Je suis "+ myAgent.getLocalName()+ ", je viens de recevoir un msg, et je vais l'envoyer à tt le monde :D");
 			
-			jadeMsgInit.setContent(msg.getContent());
-			myAgent.send(jadeMsgInit);
+			for(String dst:((SwitchAgent)myAgent).getLinkTable())
+			{
+				if(dst.equals(sender)) continue;
+				
+				ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.INFORM);
+				jadeMsgInit.addReceiver(getSwitchAID(dst));
+				
+				jadeMsgInit.setContent(msg.getContent());
+				myAgent.send(jadeMsgInit);
+			}
 		}
 		
 	}
