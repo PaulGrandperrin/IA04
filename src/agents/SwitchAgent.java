@@ -17,7 +17,7 @@ import behaviors.BhvSwitchPaquet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class SwitchAgent extends Agent {
+public class SwitchAgent extends BaseAgent {
 	private static final long serialVersionUID = 7486410164729026372L;
 
 	private GsonBuilder gsonb;
@@ -87,7 +87,7 @@ public class SwitchAgent extends Agent {
 
 	public void setLinkTable(List<String> linkTable) {
 		System.out.println("LinkTable of agent "+getLocalName()+"changed to ");
-		for (String s:LinkTable)
+		for (String s:linkTable)
 		{
 			System.out.print(s+",");
 		}
