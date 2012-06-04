@@ -13,6 +13,7 @@ import messages.AIDSerializer;
 import messages.ProtoPaquet;
 import behaviors.BhvSwitchInfoLink;
 import behaviors.BhvSwitchIA;
+import behaviors.BhvUserIncCom;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,7 +38,10 @@ public class UserAgent extends BaseAgent {
 			e.printStackTrace();
 		}
 
+		Object[] args = getArguments();
 		addBehaviour(new BhvSwitchInfoLink(this));
+		System.out.println("message à envoyer à " + args[0]);
+		addBehaviour(new BhvUserIncCom(this, 2, (String) args[0]));
 	}
 
 	public AID searchMasterAgent() {

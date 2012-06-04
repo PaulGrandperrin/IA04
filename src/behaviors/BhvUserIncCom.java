@@ -16,59 +16,64 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+@SuppressWarnings("serial")
 public class BhvUserIncCom extends CyclicBehaviour{
-
-	Agent myAgent;
+	
 	Integer counter;
 	String dst=null;
 	
 	private GsonBuilder gsonb;
+	private Gson gson;
 	
 	public BhvUserIncCom(Agent a, int counter, String dst) {
-		myAgent=a;
-		this.dst=dst;
-		this.counter=counter;
-		
+		super(a);
 		gsonb = new GsonBuilder();
 		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
-		
+				
+		this.dst=dst;
+		this.counter=counter;
+		this.gson = gsonb.create();
+				
+		if(dst != null && !dst.isEmpty())
+		{
+			//On envoie le msg en premier
+			ProtoPaquet p=new ProtoPaquet();
+			p.content= this.counter.toString();
+			p.dest=dst;
+			p.src=myAgent.getLocalName();
+			AID user=getUserAID(dst);
+			ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.REQUEST);
+			jadeMsgInit.addReceiver(user);
+			
+			jadeMsgInit.setContent(gson.toJson(p));
+			System.out.println(gson.toJson(p));
+			myAgent.send(jadeMsgInit);
+			System.out.println(myAgent.getLocalName()+ "envoie le msg initial '"+counter+"' à "+dst);
+		}
 	}
 
 	@Override
 	public void action() {
+							
+		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 		
-		Gson gson = gsonb.create();
-		
-		if(!dst.isEmpty())
-		{
-			//On envoie le msg en premier
-			ProtoPaquet p=new ProtoPaquet();
-			p.content=counter.toString();
-			p.dest=dst;
-			p.src=myAgent.getLocalName();
-			AID user=getUserAID(dst);
-			ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.INFORM);
-			jadeMsgInit.addReceiver(user);
+		if (msg != null) {
+			ProtoPaquet mess = gson.fromJson(msg.getContent(), ProtoPaquet.class);
 			
-			jadeMsgInit.setContent(gson.toJson(p));
-			myAgent.send(jadeMsgInit);
-			System.out.println(myAgent.getLocalName()+ "envoie le msg initial '"+counter+"' à "+dst);
-		}
+			ACLMessage jadeMsg = msg.createReply();
+			System.out.println("messg contents " + msg.getContent());
+			counter=Integer.parseInt(mess.content)+1;
+			mess.content=String.valueOf(counter);
+			dst=mess.src;
+			
+			mess.dest=dst;
+			mess.src=myAgent.getLocalName();
+			jadeMsg.setContent(gson.toJson(mess));
+			System.out.println(myAgent.getLocalName()+ "envoie le msg '"+counter+"' à "+dst);
+			
+			myAgent.send(jadeMsg);
+		} 
 		
-		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
-		
-		ProtoPaquet mess = gson.fromJson(msg.getContent(), ProtoPaquet.class);
-		
-		ACLMessage jadeMsg = new ACLMessage(ACLMessage.INFORM);
-		counter=Integer.parseInt(mess.content)+1;
-		mess.content=String.valueOf(counter);
-		dst=mess.src;
-		
-		mess.dest=dst;
-		mess.src=myAgent.getLocalName();
-		System.out.println(myAgent.getLocalName()+ "envoie le msg '"+counter+"' à "+dst);
-		jadeMsg.addReceiver(getUserAID(dst));
-		myAgent.send(jadeMsg);
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
