@@ -14,6 +14,7 @@ import jade.lang.acl.MessageTemplate;
 import messages.AIDSerializer;
 import messages.ProtoPaquet;
 
+import agents.BaseAgent;
 import agents.SwitchAgent;
 
 import com.google.gson.Gson;
@@ -43,41 +44,24 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 	@Override
 	public void action() {
 		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+		BaseAgent ag = (BaseAgent) myAgent;
+		
 		if(msg!=null)
 		{
 			String sender=msg.getSender().getLocalName();
-			
-			System.out.println("Je suis "+ myAgent.getLocalName()+ ", je viens de recevoir un msg, et je vais l'envoyer à tt le monde :D");
-			
+						
+			System.out.println("contenu du message : " + msg.getContent());
 			for(String dst:((SwitchAgent)myAgent).getLinkTable())
 			{
 				if(dst.equals(sender)) continue;
 				
-				ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.INFORM);
-				jadeMsgInit.addReceiver(getSwitchAID(dst));
-				
+				System.out.println("le message est envoye a " + dst);
+				ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.REQUEST);
+				jadeMsgInit.addReceiver(ag.getAIDByName(dst));				
 				jadeMsgInit.setContent(msg.getContent());
 				myAgent.send(jadeMsgInit);
 			}
 		}
 		
-	}
-	
-	private AID getSwitchAID(String name)
-	{
-		DFAgentDescription dfd = new DFAgentDescription();
-        ServiceDescription sd  = new ServiceDescription();
-        sd.setType("SwitchAgent");
-        sd.setName(name);
-        dfd.addServices(sd);
-        
-        try {
-			DFAgentDescription[] result = DFService.search(this.myAgent, dfd);
-			return result[0].getName();
-		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
 	}
 }
