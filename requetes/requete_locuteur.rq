@@ -1,0 +1,3 @@
+PREFIX reseau:  <http://utc.fr/projetIA04reseau#>
+
+SELECT ?machine ?locuteur where {?machine reseau:is_a reseau:user; reseau:speaks_to ?locuteur.}

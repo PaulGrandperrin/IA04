@@ -41,7 +41,7 @@ public class NetworkGraphFrame extends JFrame {
 		vv = new VisualizationViewer<String,String>(layout);
 		
 		Transformer<String,Paint> vertexPaint = new Transformer<String,Paint>() {
-			public Paint transform(String s) {
+			public Paint transform(String s) {				
 				if (kb.getMachineMap().get(s).machineType == KBMachine.type.USER) {
 					return Color.GREEN;	
 				} else {

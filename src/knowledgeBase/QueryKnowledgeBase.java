@@ -56,7 +56,7 @@ public class QueryKnowledgeBase {
 		OntModel model = ModelFactory.createOntologyModel();
 		model.read("file:"+fileName, null, "N3");
 
-		Query qu = QueryFactory.read("requete_base_sur.rq");
+		Query qu = QueryFactory.read("requetes/requete_base_sur.rq");
 
 		QueryExecution qexec = QueryExecutionFactory.create(qu, model) ;
 		ResultSet results = qexec.execSelect() ;
@@ -87,7 +87,7 @@ public class QueryKnowledgeBase {
 
 		qexec.close() ;
 
-		qu = QueryFactory.read("requete_type_agent.rq");
+		qu = QueryFactory.read("requetes/requete_type_agent.rq");
 
 		qexec = QueryExecutionFactory.create(qu, model) ;
 		results = qexec.execSelect() ;
@@ -97,17 +97,17 @@ public class QueryKnowledgeBase {
 			QuerySolution sol = results.next() ;
 			Resource property = sol.getResource("machine");
 			Resource property2 = sol.getResource("type") ;
-			Resource pty3 = sol.getResource("locuteur") ;
+			//Resource pty3 = sol.getResource("locuteur") ;
 
 			String mach = property.getLocalName();
 			String type = property2.getLocalName();
-			String locuteur = pty3.getLocalName();
+			//String locuteur = pty3.getLocalName();
 			
 			if(type.equals("machine")) {
 				machineMap.get(mach).machineType = KBMachine.type.SWITCH;
 			} else {
 				machineMap.get(mach).machineType =  KBMachine.type.USER;			
-				machineMap.get(mach).interlocuteur = locuteur;
+				//machineMap.get(mach).interlocuteur = locuteur;
 			}
 			i++;
 			//System.out.println(property.getLocalName() + " -> " + property2.getLocalName());
