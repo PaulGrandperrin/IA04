@@ -28,7 +28,7 @@ public abstract class BaseAgent extends Agent {
 		LinkTable = linkTable;
 	}
 	
-	private AID getSwitchAID(String name)
+	public AID getSwitchAID(String name)
 	{
 		DFAgentDescription dfd = new DFAgentDescription();
         ServiceDescription sd  = new ServiceDescription();
@@ -46,7 +46,7 @@ public abstract class BaseAgent extends Agent {
 		}
 	}
 
-	private AID getAIDByName(String name)
+	public AID getAIDByName(String name)
 	{
 		DFAgentDescription dfd = new DFAgentDescription();
 		ServiceDescription sd  = new ServiceDescription();
@@ -54,6 +54,23 @@ public abstract class BaseAgent extends Agent {
 		dfd.addServices(sd);
 		
 		try {
+			DFAgentDescription[] result = DFService.search(this, dfd);
+			return result[0].getName();
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public AID getMasterAID()
+	{
+		DFAgentDescription dfd = new DFAgentDescription();
+        ServiceDescription sd  = new ServiceDescription();
+        sd.setType( "MasterAgent" );       
+        dfd.addServices(sd);
+        
+        try {
 			DFAgentDescription[] result = DFService.search(this, dfd);
 			return result[0].getName();
 		} catch (FIPAException e) {

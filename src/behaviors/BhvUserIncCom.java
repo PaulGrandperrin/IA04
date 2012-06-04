@@ -1,5 +1,8 @@
 package behaviors;
 
+import agents.BaseAgent;
+import agents.SwitchAgent;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -24,6 +27,7 @@ public class BhvUserIncCom extends CyclicBehaviour{
 	
 	private GsonBuilder gsonb;
 	private Gson gson;
+	private boolean sentInitialMessage = false;
 	
 	public BhvUserIncCom(Agent a, int counter, String dst) {
 		super(a);
@@ -34,29 +38,22 @@ public class BhvUserIncCom extends CyclicBehaviour{
 		this.counter=counter;
 		this.gson = gsonb.create();
 				
-		if(dst != null && !dst.isEmpty())
-		{
-			//On envoie le msg en premier
-			ProtoPaquet p=new ProtoPaquet();
-			p.content= this.counter.toString();
-			p.dest=dst;
-			p.src=myAgent.getLocalName();
-			AID user=getUserAID(dst);
-			ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.REQUEST);
-			jadeMsgInit.addReceiver(user);
-			
-			jadeMsgInit.setContent(gson.toJson(p));
-			System.out.println(gson.toJson(p));
-			myAgent.send(jadeMsgInit);
-			System.out.println(myAgent.getLocalName()+ "envoie le msg initial '"+counter+"' à "+dst);
-		}
+
 	}
 
 	@Override
 	public void action() {
-							
+		BaseAgent ag = (BaseAgent) myAgent;
+		
+		/* on doit attendre d'avoir reçu la table des liens pour commencer à envoyer des choses */
+		if(!sentInitialMessage && ag.getLinkTable() != null) {
+			sendInitialMessage();
+			sentInitialMessage = true;
+		}
+		
 		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 		
+		 
 		if (msg != null) {
 			ProtoPaquet mess = gson.fromJson(msg.getContent(), ProtoPaquet.class);
 			
@@ -98,6 +95,32 @@ public class BhvUserIncCom extends CyclicBehaviour{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	private void sendInitialMessage() {
+		if(dst != null && !dst.isEmpty())
+		{
+			//On envoie le msg en premier
+			ProtoPaquet p=new ProtoPaquet();
+			p.content= this.counter.toString();
+			p.dest=dst;
+			p.src=myAgent.getLocalName();
+			//AID user=getUserAID(dst);
+			ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.REQUEST);
+			
+			
+			jadeMsgInit.setContent(gson.toJson(p));
+			System.out.println(gson.toJson(p));
+			
+			BaseAgent ag = (BaseAgent) myAgent; 
+			for(String linkedSwitch:ag.getLinkTable()) {
+				//if(dst.equals(sender)) continue;
+				jadeMsgInit.addReceiver(ag.getSwitchAID(linkedSwitch));				
+			}
+			
+			myAgent.send(jadeMsgInit);
+			System.out.println(myAgent.getLocalName()+ "envoie le msg initial '"+counter+"' à "+dst);
 		}
 	}
 }
