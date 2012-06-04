@@ -17,6 +17,7 @@ import behaviors.GUIUpdateBehaviour;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -27,13 +28,13 @@ public class NetworkGraphFrame extends JFrame {
 
 	public VisualizationViewer<String,String> vv;
 	
-	public NetworkGraphFrame(MasterAgent agent) {
+	public NetworkGraphFrame(final MasterAgent agent) {
 		super();
 		this.setSize(640, 480);
 		this.setVisible(true);
 		this.ag = agent;
 		final QueryKnowledgeBase kb = new QueryKnowledgeBase("./network.n3");
-		Graph<String, String> g = kb.getGraph();
+		final Graph<String, String> g = kb.getGraph();
 		// The Layout<V, E> is parameterized by the vertex and edge types
 		Layout<String, String> layout = new CircleLayout<String, String>(g);
 		layout.setSize(new Dimension(300,300)); // sets the initial size of the space
@@ -50,10 +51,12 @@ public class NetworkGraphFrame extends JFrame {
 			
 			}
 		};
-		
+				
 		Transformer<String,Paint> edgePaint = new Transformer<String,Paint>() {
 			public Paint transform(String s) {
-				if(new Random().nextBoolean()) {
+				Pair<String> p = g.getEndpoints(s);
+				
+				if(agent.connectionBetweenEdges(p.getFirst(), p.getSecond())) {
 					return Color.red;
 				} else
 					return Color.black;

@@ -49,17 +49,17 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 		if(msg!=null)
 		{
 			String sender=msg.getSender().getLocalName();
-						
-			System.out.println("contenu du message : " + msg.getContent());
+					
 			for(String dst:((SwitchAgent)myAgent).getLinkTable())
 			{
 				if(dst.equals(sender)) continue;
-				
-				System.out.println("le message est envoye a " + dst);
+								
 				ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.REQUEST);
 				jadeMsgInit.addReceiver(ag.getAIDByName(dst));				
 				jadeMsgInit.setContent(msg.getContent());
 				myAgent.send(jadeMsgInit);
+								
+				ag.addBehaviour(new BhvNotifyMaster(ag.getLocalName(), dst));
 			}
 		}
 		

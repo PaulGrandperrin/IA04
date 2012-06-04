@@ -1,5 +1,6 @@
 package behaviors;
 
+import agents.MasterAgent;
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -15,7 +16,9 @@ public class GUIUpdateBehaviour extends WakerBehaviour {
 
 
 	protected void onWake() {
+		MasterAgent ag = (MasterAgent) myAgent;
 		vv.repaint();
-		reset(1000);
+		ag.clearDisplayedConnections();
+		reset(500);
 	}
 }

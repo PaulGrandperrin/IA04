@@ -1,24 +1,5 @@
 package agents;
 
-import java.util.List;
-import java.util.Map;
-
-import messages.AIDSerializer;
-import messages.ProtoPaquet;
-import messages.ProtoInfoLink;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-
 import gui.NetworkGraphFrame;
 import jade.core.AID;
 import jade.domain.DFService;
@@ -28,17 +9,31 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
-import behaviors.BhvSwitchPaquet;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import messages.ProtoInfoLink;
+import atlas.lib.Pair;
+import behaviors.BhvMasterHandleNotifications;
 import behaviors.GUIUpdateBehaviour;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class MasterAgent extends GuiAgent {
 	private static final long serialVersionUID = -6011994599868680168L;
 
 	private GsonBuilder gsonb;
 	private Map<String, List<String>> graphAgent;
+	private List<Pair<String, String>> displayedConnections;
 	
 	@SuppressWarnings("unchecked")
 	protected void setup() {
+		displayedConnections = new ArrayList();
+		
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
@@ -62,6 +57,7 @@ public class MasterAgent extends GuiAgent {
 
 		
 		addBehaviour(new GUIUpdateBehaviour(this, 1000, gui.vv));
+		addBehaviour(new BhvMasterHandleNotifications());
 		
 		gsonb = new GsonBuilder();
 
@@ -117,5 +113,29 @@ public class MasterAgent extends GuiAgent {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public void pushPair(Pair<String, String> p) {
+		synchronized (this) {
+			displayedConnections.add(p);
+		}
+	}
+	
+	public void clearDisplayedConnections() {
+		synchronized (this) {
+			displayedConnections.clear();
+		}
+	}
+
+	public boolean connectionBetweenEdges(String first, String second) {
+		// scan les connections affiches au cas
+		for(int i = 0; i < displayedConnections.size(); i++) {
+			Pair<String, String> p = displayedConnections.get(i);
+			if((p.car().equals(first) && p.cdr().equals(second)) ||
+			   (p.car().equals(second) && p.cdr().equals(first))) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
