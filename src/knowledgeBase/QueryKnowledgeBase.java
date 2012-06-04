@@ -97,23 +97,40 @@ public class QueryKnowledgeBase {
 			QuerySolution sol = results.next() ;
 			Resource property = sol.getResource("machine");
 			Resource property2 = sol.getResource("type") ;
-			//Resource pty3 = sol.getResource("locuteur") ;
 
 			String mach = property.getLocalName();
-			String type = property2.getLocalName();
-			//String locuteur = pty3.getLocalName();
+			String type = property2.getLocalName();			
 			
 			if(type.equals("machine")) {
 				machineMap.get(mach).machineType = KBMachine.type.SWITCH;
 			} else {
-				machineMap.get(mach).machineType =  KBMachine.type.USER;			
-				//machineMap.get(mach).interlocuteur = locuteur;
+				machineMap.get(mach).machineType =  KBMachine.type.USER;							
 			}
-			i++;
-			//System.out.println(property.getLocalName() + " -> " + property2.getLocalName());
+			i++;			
 		}
 
 		qexec.close() ;
+		
+		qu = QueryFactory.read("requetes/requete_locuteur.rq");
+
+		qexec = QueryExecutionFactory.create(qu, model) ;
+		results = qexec.execSelect() ;
+
+		i = 0;
+		while(results.hasNext()){
+			QuerySolution sol = results.next() ;
+			Resource property = sol.getResource("machine");			
+			Resource property2 = sol.getResource("locuteur") ;
+
+			String mach = property.getLocalName();
+			String locuteur = property2.getLocalName();
+			if (mach != null && locuteur != null)
+				machineMap.get(mach).interlocuteur = locuteur;
+			
+		}
+		
+		qexec.close();
+		
 		return graph;
 	}
 
