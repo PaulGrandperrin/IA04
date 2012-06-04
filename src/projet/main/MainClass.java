@@ -82,8 +82,10 @@ public class MainClass {
 			
 			if(machineMap.get(nom).machineType == KBMachine.type.SWITCH)
 				agent = ac.createNewAgent(nom, "agents.SwitchAgent", new Object[]{});
-			else
-				agent = ac.createNewAgent(nom, "agents.UserAgent", new Object[]{});
+			else {
+				// FIXME: pas de vérification que l'agent avec qui on communique est déjà instancié.
+				agent = ac.createNewAgent(nom, "agents.UserAgent", new Object[]{machineMap.get(nom).interlocuteur});
+			}
 			
 			agent.start();
 		}
