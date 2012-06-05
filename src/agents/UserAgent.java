@@ -1,21 +1,21 @@
 package agents;
 
-import java.util.List;
-
+import gui.ChatFrame;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.lang.acl.ACLMessage;
-import messages.AIDSerializer;
-import messages.ProtoPaquet;
-import behaviors.BhvSwitchInfoLink;
-import behaviors.BhvSwitchIA;
-import behaviors.BhvUserIncCom;
+import jade.gui.GuiEvent;
 
-import com.google.gson.Gson;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.List;
+
+import behaviors.BhvSwitchInfoLink;
+import behaviors.BhvUserIncCom;
+import behaviors.SendMessageBehaviour;
+
 import com.google.gson.GsonBuilder;
 
 public class UserAgent extends BaseAgent {
@@ -24,7 +24,23 @@ public class UserAgent extends BaseAgent {
 	private GsonBuilder gsonb;
 
 	private List<String> LinkTable;
+	
+	public PropertyChangeSupport changes;
+	private ChatFrame frame;
+	public static String MSG_RECEIVED_PROP = "MSG_RECEIVED_PROP";
+	public static int SEND_MESSAGE_EVENT = 1;
+	
+	private String interlocuteur;
 
+
+	public UserAgent() {
+		changes = new PropertyChangeSupport(this);
+	}
+	
+	public void addPropertyChangeListener(PropertyChangeListener l) {
+		changes.addPropertyChangeListener(l);		
+	}
+	
 	protected void setup() {
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
@@ -37,11 +53,18 @@ public class UserAgent extends BaseAgent {
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
+		
+		frame = new ChatFrame(this);
 
 		Object[] args = getArguments();
 		addBehaviour(new BhvSwitchInfoLink(this));
 		System.out.println("message à envoyer à " + args[0]);
-		addBehaviour(new BhvUserIncCom(this, 2, (String) args[0]));
+		//addBehaviour(new BhvUserIncCom(this, 2, (String) args[0]));
+		
+		if (args[0] != null) {
+			interlocuteur = (String) args[0];	
+		}
+		
 	}
 
 	public AID searchMasterAgent() {
@@ -64,6 +87,19 @@ public class UserAgent extends BaseAgent {
 		}
 
 		return masterAgent;
+	}
+	
+	
+	protected void onGuiEvent(GuiEvent ev) {
+		
+		if (ev.getType() == SEND_MESSAGE_EVENT) {
+			String s = (String) ev.getParameter(0);
+			
+			System.out.println("chaine " + s);
+			System.out.println(interlocuteur);
+			this.addBehaviour(new SendMessageBehaviour(this.getLocalName(), interlocuteur, s));
+		}
+		
 	}
 
 }

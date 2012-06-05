@@ -10,8 +10,10 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.gui.GuiAgent;
+import jade.gui.GuiEvent;
 
-public abstract class BaseAgent extends Agent {
+public abstract class BaseAgent extends GuiAgent {
 	private static final long serialVersionUID = 1L;
 	private List<String> LinkTable;
 	private GsonBuilder gsonb;
@@ -78,5 +80,11 @@ public abstract class BaseAgent extends Agent {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@Override
+	protected void onGuiEvent(GuiEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
