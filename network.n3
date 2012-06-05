@@ -3,14 +3,14 @@
 reseau:a 
 	reseau:linked_to reseau:b; reseau:is_a reseau:machine .
 	
+reseau:d
+	reseau:linked_to reseau:a; reseau:is_a reseau:machine .
+	
 reseau:b
 	reseau:linked_to reseau:c; reseau:is_a reseau:machine .
 	
 reseau:c
-	reseau:linked_to reseau:d; reseau:is_a reseau:machine .
-	
-reseau:d
-	reseau:linked_to reseau:a; reseau:is_a reseau:machine .
+	reseau:is_a reseau:machine .
 
 reseau:user_a
 	reseau:linked_to reseau:a; reseau:is_a reseau:user .
@@ -21,3 +21,7 @@ reseau:user_b
 reseau:user_c
 	reseau:linked_to reseau:c; reseau:is_a reseau:user .
 	
+#    USER_B -- D -- A -- USER_A
+#                   |
+#                   B -- C -- USER_C
+

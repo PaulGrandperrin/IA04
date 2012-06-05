@@ -21,14 +21,15 @@ import messages.ProtoInfoLink;
 public class BhvSwitchInfoLink extends CyclicBehaviour {
 
 	private GsonBuilder gsonb;
-	Agent myAgent;
+	BaseAgent myAgent;
 
 	public BhvSwitchInfoLink(Agent a) {
 		super();
-		myAgent=a;
+		myAgent=(BaseAgent)a;
 		gsonb = new GsonBuilder();
 		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
-
+		myAgent.log("création du behavior SwitchInfoLink");
+		
 	}
 
 	@Override

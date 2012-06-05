@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import edu.uci.ics.jung.graph.Graph;
 
@@ -90,6 +91,15 @@ public class MainClass {
 			agent.start();
 		}
 
+		
+//		for(Entry<String, List<String>> tmp : kb.getLinks().entrySet())
+//		{
+//			
+//			System.out.println("\t"+s);
+//		}
+//		
+		System.out.println(kb.getLinks());
+		
 		return kb.getLinks();
 		
 	

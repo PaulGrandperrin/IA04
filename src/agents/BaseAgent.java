@@ -2,6 +2,8 @@ package agents;
 
 import java.util.List;
 
+import messages.ProtoPaquet;
+
 import com.google.gson.GsonBuilder;
 
 import jade.core.AID;
@@ -24,7 +26,12 @@ public abstract class BaseAgent extends Agent {
 		return LinkTable;
 	}
 
-	public void setLinkTable(List<String> linkTable) {				
+	public void setLinkTable(List<String> linkTable) {
+		log("recu liste liens");
+		for(String s:linkTable)
+		{
+			log("\t"+s);
+		}
 		LinkTable = linkTable;
 	}
 	
@@ -78,5 +85,15 @@ public abstract class BaseAgent extends Agent {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public void log(String msg)
+	{
+		System.out.println("# "+this.getLocalName()+"\t => "+msg);
+	}
+	
+	public void logPaquet(ProtoPaquet p)
+	{
+		log("=== Paquet recu ===\tsrc: "+p.src+"\tdst: "+p.dest+"\tcon: "+p.content);
 	}
 }
