@@ -21,7 +21,7 @@ import jade.lang.acl.MessageTemplate;
 
 @SuppressWarnings("serial")
 public class BhvUserIncCom extends CyclicBehaviour{
-	
+	BaseAgent myAgent;
 	Integer counter;
 	String dst=null;
 	
@@ -31,6 +31,8 @@ public class BhvUserIncCom extends CyclicBehaviour{
 	
 	public BhvUserIncCom(Agent a, int counter, String dst) {
 		super(a);
+		myAgent=(BaseAgent)a;
+		myAgent.log("création du behavior UserIncCom");
 		gsonb = new GsonBuilder();
 		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
 				
@@ -38,7 +40,6 @@ public class BhvUserIncCom extends CyclicBehaviour{
 		this.counter=counter;
 		this.gson = gsonb.create();
 				
-
 	}
 
 	@Override
@@ -57,18 +58,22 @@ public class BhvUserIncCom extends CyclicBehaviour{
 		if (msg != null) {
 			ProtoPaquet mess = gson.fromJson(msg.getContent(), ProtoPaquet.class);
 			
-			ACLMessage jadeMsg = msg.createReply();
-			System.out.println("messg contents " + msg.getContent());
-			counter=Integer.parseInt(mess.content)+1;
-			mess.content=String.valueOf(counter);
-			dst=mess.src;
-			
-			mess.dest=dst;
-			mess.src=myAgent.getLocalName();
-			jadeMsg.setContent(gson.toJson(mess));
-			System.out.println(myAgent.getLocalName()+ "envoie le msg '"+counter+"' à "+dst);
-			
-			myAgent.send(jadeMsg);
+			if(mess.dest.equals(myAgent.getLocalName()))
+			{
+				myAgent.logPaquet(mess);
+				ACLMessage jadeMsg = msg.createReply();
+				System.out.println("messg contents " + msg.getContent());
+				counter=Integer.parseInt(mess.content)+1;
+				mess.content=String.valueOf(counter);
+				dst=mess.src;
+				
+				mess.dest=dst;
+				mess.src=myAgent.getLocalName();
+				jadeMsg.setContent(gson.toJson(mess));
+				myAgent.log("répond à "+dst);
+				
+				myAgent.send(jadeMsg);
+			}
 		} 
 		
 		try {
@@ -111,7 +116,6 @@ public class BhvUserIncCom extends CyclicBehaviour{
 			
 			
 			jadeMsgInit.setContent(gson.toJson(p));
-			System.out.println(gson.toJson(p));
 			
 			BaseAgent ag = (BaseAgent) myAgent; 
 			for(String linkedSwitch:ag.getLinkTable()) {
@@ -120,7 +124,7 @@ public class BhvUserIncCom extends CyclicBehaviour{
 			}
 			
 			myAgent.send(jadeMsgInit);
-			System.out.println(myAgent.getLocalName()+ "envoie le msg initial '"+counter+"' à "+dst);
+			myAgent.log("envoie message initial à "+p.dest);
 		}
 	}
 }

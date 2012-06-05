@@ -25,6 +25,7 @@ public class SwitchAgent extends BaseAgent {
 	private List<String> LinkTable;
 
 	protected void setup() {
+		log("initialisation");
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
@@ -36,7 +37,7 @@ public class SwitchAgent extends BaseAgent {
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
-
+		
 		addBehaviour(new BhvSwitchInfoLink(this));
 		addBehaviour(new BhvSwitchPaquet(this));
 	}
@@ -81,12 +82,5 @@ public class SwitchAgent extends BaseAgent {
 //		System.out.println("message envoyé");
 //	}
 
-	public List<String> getLinkTable() {
-		return LinkTable;
-	}
-
-	public void setLinkTable(List<String> linkTable) {		
-		LinkTable = linkTable;
-	}
 
 }

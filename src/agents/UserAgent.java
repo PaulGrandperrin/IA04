@@ -42,6 +42,7 @@ public class UserAgent extends BaseAgent {
 	}
 	
 	protected void setup() {
+		log("initialisation");
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
@@ -58,13 +59,18 @@ public class UserAgent extends BaseAgent {
 
 		Object[] args = getArguments();
 		addBehaviour(new BhvSwitchInfoLink(this));
+
 		System.out.println("message à envoyer à " + args[0]);
 		//addBehaviour(new BhvUserIncCom(this, 2, (String) args[0]));
 		
 		if (args[0] != null) {
 			interlocuteur = (String) args[0];	
+			log("envoie des entiers à "+args[0]);
 		}
 		
+		
+			
+		addBehaviour(new BhvUserIncCom(this, 2, (String) args[0]));
 	}
 
 	public AID searchMasterAgent() {

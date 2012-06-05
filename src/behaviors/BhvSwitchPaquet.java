@@ -12,6 +12,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import messages.AIDSerializer;
+import messages.ProtoInfoLink;
 import messages.ProtoPaquet;
 
 import agents.BaseAgent;
@@ -23,23 +24,28 @@ import com.google.gson.GsonBuilder;
 public class BhvSwitchPaquet extends CyclicBehaviour {
 
 	private static final long serialVersionUID = -8645230578588902973L;
-
+	BaseAgent myAgent;
+	private GsonBuilder gsonb;
+	
 	public BhvSwitchPaquet(Agent a) {
 		super(a);
-		System.out.println("Hi");
-	}
-
-	private void answer(ACLMessage msg) {
-		GsonBuilder gsonb = new GsonBuilder();
+		myAgent=((BaseAgent)a);
+		myAgent.log("création du behavior SwitchPaquet");
+		gsonb = new GsonBuilder();
 		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
-		Gson json = gsonb.create();
-
-		ProtoPaquet mess = json.fromJson(msg.getContent(), ProtoPaquet.class);
-
-		System.out.println("recu master:");
-		System.out.println(mess.content);
-		System.out.println(mess.src);
 	}
+
+//	private void answer(ACLMessage msg) {
+//		GsonBuilder gsonb = new GsonBuilder();
+//		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
+//		Gson json = gsonb.create();
+//
+//		ProtoPaquet mess = json.fromJson(msg.getContent(), ProtoPaquet.class);
+//
+//		System.out.println("recu master:");
+//		System.out.println(mess.content);
+//		System.out.println(mess.src);
+//	}
 
 	@Override
 	public void action() {
@@ -49,11 +55,16 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 		if(msg!=null)
 		{
 			String sender=msg.getSender().getLocalName();
-					
+			
+			//Log
+			Gson gson = gsonb.create();
+			ProtoPaquet p = gson.fromJson(msg.getContent(), ProtoPaquet.class);	
+			myAgent.logPaquet(p);
+			
 			for(String dst:((SwitchAgent)myAgent).getLinkTable())
 			{
 				if(dst.equals(sender)) continue;
-								
+				myAgent.log("transmission du paquet à "+dst);
 				ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.REQUEST);
 				jadeMsgInit.addReceiver(ag.getAIDByName(dst));				
 				jadeMsgInit.setContent(msg.getContent());

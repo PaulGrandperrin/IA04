@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import messages.ProtoInfoLink;
+import messages.ProtoPaquet;
 import atlas.lib.Pair;
 import behaviors.BhvMasterHandleNotifications;
 import behaviors.GUIUpdateBehaviour;
@@ -32,6 +33,7 @@ public class MasterAgent extends GuiAgent {
 	
 	@SuppressWarnings("unchecked")
 	protected void setup() {
+		log("initialisation");
 		displayedConnections = new ArrayList();
 		
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -69,6 +71,7 @@ public class MasterAgent extends GuiAgent {
 			ProtoInfoLink infoLink = new ProtoInfoLink();
 			infoLink.links = graphAgent.get(agentName);
 			jadeMsg.setContent(gson.toJson(infoLink));
+			log("envoie de la liste des liens à "+agentName);
 			send(jadeMsg);
 		}
 
@@ -137,5 +140,15 @@ public class MasterAgent extends GuiAgent {
 			}
 		}
 		return false;
+	}
+	
+	public void log(String msg)
+	{
+		System.out.println("# "+this.getLocalName()+"\t => "+msg);
+	}
+	
+	public void logPaquet(ProtoPaquet p)
+	{
+		log("=== Paquet recu ===\tsrc: "+p.src+"\tdst: "+p.dest+"\tcon: "+p.content);
 	}
 }
