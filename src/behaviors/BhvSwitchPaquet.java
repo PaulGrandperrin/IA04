@@ -65,6 +65,14 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 			{
 				if(dst.equals(sender)) continue;
 				myAgent.log("transmission du paquet à "+dst);
+				
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.REQUEST);
 				jadeMsgInit.addReceiver(ag.getAIDByName(dst));				
 				jadeMsgInit.setContent(msg.getContent());

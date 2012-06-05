@@ -98,7 +98,6 @@ public class MainClass {
 //			System.out.println("\t"+s);
 //		}
 //		
-		System.out.println(kb.getLinks());
 		
 		return kb.getLinks();
 		

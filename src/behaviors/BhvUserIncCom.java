@@ -62,7 +62,6 @@ public class BhvUserIncCom extends CyclicBehaviour{
 			{
 				myAgent.logPaquet(mess);
 				ACLMessage jadeMsg = msg.createReply();
-				System.out.println("messg contents " + msg.getContent());
 				counter=Integer.parseInt(mess.content)+1;
 				mess.content=String.valueOf(counter);
 				dst=mess.src;
@@ -71,17 +70,18 @@ public class BhvUserIncCom extends CyclicBehaviour{
 				mess.src=myAgent.getLocalName();
 				jadeMsg.setContent(gson.toJson(mess));
 				myAgent.log("répond à "+dst);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 				myAgent.send(jadeMsg);
 			}
 		} 
 		
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 	}
 	

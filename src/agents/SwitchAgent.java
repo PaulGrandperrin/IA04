@@ -1,6 +1,8 @@
 package agents;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jade.core.AID;
 import jade.core.Agent;
@@ -23,6 +25,7 @@ public class SwitchAgent extends BaseAgent {
 	private GsonBuilder gsonb;
 
 	private List<String> LinkTable;
+	public Map<String, Integer> routeTable;
 
 	protected void setup() {
 		log("initialisation");
@@ -37,6 +40,8 @@ public class SwitchAgent extends BaseAgent {
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
+		
+		routeTable=new HashMap<String, Integer>();
 		
 		addBehaviour(new BhvSwitchInfoLink(this));
 		addBehaviour(new BhvSwitchPaquet(this));
