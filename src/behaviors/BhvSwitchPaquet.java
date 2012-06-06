@@ -57,7 +57,7 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 			String sender=msg.getSender().getLocalName();
 			
 			//Log
-			Gson gson = gsonb.create();
+			Gson gson = gsonb.create();			
 			ProtoPaquet p = gson.fromJson(msg.getContent(), ProtoPaquet.class);	
 			myAgent.logPaquet(p);
 			

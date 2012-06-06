@@ -97,9 +97,7 @@ public class UserAgent extends BaseAgent {
 		
 		if (ev.getType() == SEND_MESSAGE_EVENT) {
 			String s = (String) ev.getParameter(0);
-			
-			System.out.println("chaine " + s);
-			System.out.println(interlocuteur);
+						
 			this.addBehaviour(new SendMessageBehaviour(this.getLocalName(), interlocuteur, s));
 		}
 		

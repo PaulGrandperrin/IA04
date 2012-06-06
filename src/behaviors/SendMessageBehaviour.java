@@ -38,7 +38,7 @@ public class SendMessageBehaviour extends OneShotBehaviour {
 		pq.src = this.src;
 		pq.dest = this.dest;
 		
-		msg.setContent(gson.toJson(pq.content));
+		msg.setContent(gson.toJson(pq));
 		
 		BaseAgent ag = (BaseAgent) myAgent; 
 		for(String linkedSwitch:ag.getLinkTable()) {
