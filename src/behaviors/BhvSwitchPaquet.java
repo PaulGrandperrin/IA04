@@ -63,7 +63,7 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 			
 			for(String dst:((SwitchAgent)myAgent).getLinkTable())
 			{
-				if(dst.equals(sender)) continue;
+				if(dst.equals(sender) || dst.equals(p.src)) continue;
 				myAgent.log("transmission du paquet à "+dst);
 				
 				try {
