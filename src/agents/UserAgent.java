@@ -58,16 +58,17 @@ public class UserAgent extends BaseAgent {
 		frame = new ChatFrame(this);
 
 		Object[] args = getArguments();
+		interlocuteur = (String) args[0];
+		
 		addBehaviour(new BhvSwitchInfoLink(this));
 		
+		/*
 		if (args[0] != null) {
 			interlocuteur = (String) args[0];	
 			log("envoie des entiers à "+args[0]);
-		}
-		
-		
-			
+		}			
 		addBehaviour(new BhvUserIncCom(this, 2, (String) args[0]));
+		*/
 	}
 
 	public AID searchMasterAgent() {
@@ -98,7 +99,9 @@ public class UserAgent extends BaseAgent {
 		if (ev.getType() == SEND_MESSAGE_EVENT) {
 			String s = (String) ev.getParameter(0);
 						
-			this.addBehaviour(new SendMessageBehaviour(this.getLocalName(), interlocuteur, s));
+			if(interlocuteur != null) {
+				this.addBehaviour(new SendMessageBehaviour(this.getLocalName(), interlocuteur, s));
+			}
 		}
 		
 	}
