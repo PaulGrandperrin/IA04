@@ -13,7 +13,7 @@ reseau:c
 	reseau:is_a reseau:machine .
 
 reseau:user_a
-	reseau:linked_to reseau:a; reseau:is_a reseau:user .
+	reseau:linked_to reseau:a; reseau:is_a reseau:user; reseau:speaks_to reseau:user_b .
 	
 reseau:user_b
 	reseau:linked_to reseau:d; reseau:is_a reseau:user; reseau:speaks_to reseau:user_a .
