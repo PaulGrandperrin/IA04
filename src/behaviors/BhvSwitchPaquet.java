@@ -16,12 +16,12 @@ import com.google.gson.GsonBuilder;
 public class BhvSwitchPaquet extends CyclicBehaviour {
 
 	private static final long serialVersionUID = -8645230578588902973L;
-	BaseAgent myAgent;
+	SwitchAgent myAgent;
 	private GsonBuilder gsonb;
 	
 	public BhvSwitchPaquet(Agent a) {
 		super(a);
-		myAgent=((BaseAgent)a);
+		myAgent=((SwitchAgent)a);
 		myAgent.log("création du behavior SwitchPaquet");
 		gsonb = new GsonBuilder();
 		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
@@ -42,7 +42,6 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 	@Override
 	public void action() {
 		ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-		BaseAgent ag = (BaseAgent) myAgent;
 		
 		if(msg!=null)
 		{
@@ -53,11 +52,16 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 			ProtoPaquet p = gson.fromJson(msg.getContent(), ProtoPaquet.class);	
 			myAgent.logPaquet(p);
 			
-			for(String dst:((SwitchAgent)myAgent).getLinkTable())
+			//Save source adresse in routeTable if needed
+			if(!myAgent.routeTable.containsKey(p.src))
 			{
-				if(dst.equals(sender) || dst.equals(p.src)) continue;
+				myAgent.routeTable.put(p.src,msg.getSender().getLocalName());
+			}
+			
+			if(myAgent.routeTable.containsKey(p.dest))
+			{
+				String dst=myAgent.routeTable.get(p.dest);
 				myAgent.log("transmission du paquet à "+dst);
-				
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -66,11 +70,34 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 				}
 				
 				ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.REQUEST);
-				jadeMsgInit.addReceiver(ag.getAIDByName(dst));				
+				jadeMsgInit.addReceiver(myAgent.getAIDByName(dst));				
 				jadeMsgInit.setContent(msg.getContent());
 				myAgent.send(jadeMsgInit);
 								
-				ag.addBehaviour(new BhvNotifyMaster(ag.getLocalName(), dst));
+				myAgent.addBehaviour(new BhvNotifyMaster(myAgent.getLocalName(), dst));
+			}
+			else //L'adresse de destination n'est pas dans la table de routage => on broadcast
+			{
+			
+				for(String dst:((SwitchAgent)myAgent).getLinkTable())
+				{
+					if(dst.equals(sender) || dst.equals(p.src)) continue;
+					myAgent.log("transmission du paquet (broadcast) à "+dst);
+					
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					ACLMessage jadeMsgInit = new ACLMessage(ACLMessage.REQUEST);
+					jadeMsgInit.addReceiver(myAgent.getAIDByName(dst));				
+					jadeMsgInit.setContent(msg.getContent());
+					myAgent.send(jadeMsgInit);
+									
+					myAgent.addBehaviour(new BhvNotifyMaster(myAgent.getLocalName(), dst));
+				}
 			}
 		}
 		

@@ -21,7 +21,7 @@ public class SwitchAgent extends BaseAgent {
 	private GsonBuilder gsonb;
 
 	private List<String> LinkTable;
-	public Map<String, Integer> routeTable;
+	public Map<String, String> routeTable;
 
 	protected void setup() {
 		log("initialisation");
@@ -37,7 +37,7 @@ public class SwitchAgent extends BaseAgent {
 			e.printStackTrace();
 		}
 		
-		routeTable=new HashMap<String, Integer>();
+		routeTable=new HashMap<String, String>();
 		
 		addBehaviour(new BhvSwitchInfoLink(this));
 		addBehaviour(new BhvSwitchPaquet(this));
