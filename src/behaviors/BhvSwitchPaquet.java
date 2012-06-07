@@ -1,20 +1,12 @@
 package behaviors;
 
-import sun.security.action.GetLongAction;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.WakerBehaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import messages.AIDSerializer;
-import messages.ProtoInfoLink;
 import messages.ProtoPaquet;
-
 import agents.BaseAgent;
 import agents.SwitchAgent;
 

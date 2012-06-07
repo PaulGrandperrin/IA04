@@ -1,22 +1,18 @@
 package agents;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import jade.core.AID;
-import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.lang.acl.ACLMessage;
-import messages.AIDSerializer;
-import messages.ProtoPaquet;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import behaviors.BhvSwitchInfoLink;
 import behaviors.BhvSwitchPaquet;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class SwitchAgent extends BaseAgent {

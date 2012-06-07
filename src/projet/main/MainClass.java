@@ -1,31 +1,19 @@
 package projet.main;
 
-import jade.core.AID;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import edu.uci.ics.jung.graph.Graph;
 
 import knowledgeBase.KBMachine;
-import knowledgeBase.KBMachine.type;
 import knowledgeBase.QueryKnowledgeBase;
+import edu.uci.ics.jung.graph.Graph;
 
 public class MainClass {
 
