@@ -1,4 +1,4 @@
-package behaviors;
+package behaviors.user;
 
 import agents.BaseAgent;
 import agents.SwitchAgent;

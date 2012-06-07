@@ -13,8 +13,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 import behaviors.BhvSwitchInfoLink;
-import behaviors.BhvUserIncCom;
-import behaviors.SendMessageBehaviour;
+import behaviors.user.SendMessageBehaviour;
 
 import com.google.gson.GsonBuilder;
 
