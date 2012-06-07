@@ -13,6 +13,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 import behaviors.BhvSwitchInfoLink;
+import behaviors.user.ChatReceptionBehaviour;
 import behaviors.user.SendMessageBehaviour;
 
 import com.google.gson.GsonBuilder;
@@ -28,6 +29,7 @@ public class UserAgent extends BaseAgent {
 	private ChatFrame frame;
 	public static String MSG_RECEIVED_PROP = "MSG_RECEIVED_PROP";
 	public static int SEND_MESSAGE_EVENT = 1;
+	public static int RECEIVED_MESSAGE_EVENT = 2;
 	
 	private String interlocuteur;
 
@@ -60,6 +62,7 @@ public class UserAgent extends BaseAgent {
 		interlocuteur = (String) args[0];
 		
 		addBehaviour(new BhvSwitchInfoLink(this));
+		addBehaviour(new ChatReceptionBehaviour(this, 0));
 		
 		/*
 		if (args[0] != null) {
@@ -98,9 +101,11 @@ public class UserAgent extends BaseAgent {
 		if (ev.getType() == SEND_MESSAGE_EVENT) {
 			String s = (String) ev.getParameter(0);
 						
-			if(interlocuteur != null) {
+			if(interlocuteur != null) {				
 				this.addBehaviour(new SendMessageBehaviour(this.getLocalName(), interlocuteur, s));
 			}
+		} else if (ev.getType() == RECEIVED_MESSAGE_EVENT) {
+				frame.addMessage((String) ev.getParameter(0));
 		}
 		
 	}
