@@ -119,9 +119,9 @@ public class MasterAgent extends GuiAgent {
 	}
 	
 	public void pushPair(Pair<String, String> p) {
-		synchronized (this) {
+		//synchronized (this) {	
 			displayedConnections.add(p);
-		}
+		//}
 	}
 	
 	public void clearDisplayedConnections() {

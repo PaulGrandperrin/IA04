@@ -1,6 +1,7 @@
 package behaviors.user;
 
 import agents.BaseAgent;
+import behaviors.BhvNotifyMaster;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -43,7 +44,8 @@ public class SendMessageBehaviour extends OneShotBehaviour {
 		BaseAgent ag = (BaseAgent) myAgent; 
 		for(String linkedSwitch:ag.getLinkTable()) {
 			//if(dst.equals(sender)) continue;
-			msg.addReceiver(ag.getSwitchAID(linkedSwitch));				
+			msg.addReceiver(ag.getSwitchAID(linkedSwitch));			
+			myAgent.addBehaviour(new BhvNotifyMaster(this.src, linkedSwitch));
 		}
 		
 		System.out.println("msg: " + msg.getContent());
