@@ -3,17 +3,16 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Paint;
-import java.util.Random;
 
 import javax.swing.JFrame;
 
 import knowledgeBase.KBMachine;
 import knowledgeBase.QueryKnowledgeBase;
 
+import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 
 import agents.MasterAgent;
-import behaviors.GUIUpdateBehaviour;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
@@ -22,8 +21,8 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 
-@SuppressWarnings("serial")
-public class NetworkGraphFrame extends JFrame {
+@SuppressWarnings({ "serial", "rawtypes" })
+public class NetworkGraphFrame extends JFrame implements Factory {
 	MasterAgent ag;
 
 	public VisualizationViewer<String,String> vv;
@@ -42,7 +41,10 @@ public class NetworkGraphFrame extends JFrame {
 		vv = new VisualizationViewer<String,String>(layout);
 		
 		Transformer<String,Paint> vertexPaint = new Transformer<String,Paint>() {
-			public Paint transform(String s) {				
+			public Paint transform(String s) {
+				if (kb.getMachineMap().get(s) == null)
+					return Color.RED;
+				
 				if (kb.getMachineMap().get(s).machineType == KBMachine.type.USER) {
 					return Color.GREEN;	
 				} else {
@@ -74,12 +76,22 @@ public class NetworkGraphFrame extends JFrame {
 		vv.setGraphMouse(gm);
 		*/
 		EditingModalGraphMouse<String, String> em = new EditingModalGraphMouse<String, String>(
-													    vv.getRenderContext(), null, null, 0, 0);
+													    vv.getRenderContext(), new Factory<String>() {
+															public String create() {
+																return "Vertex_i";
+															}
+														}, this, 0, 0);
 		vv.setGraphMouse(em);
 		this.getContentPane().add(vv);
 		this.pack();
 		this.setTitle("Graphe basique");
 
+	}
+
+	// gestion des edge
+	public Object create() {
+		System.out.println("asked to create an edge");
+		return "Edge-i";		
 	}
 	
 	
