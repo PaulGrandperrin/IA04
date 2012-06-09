@@ -12,11 +12,20 @@ reseau:b
 reseau:c
 	reseau:is_a reseau:machine .
 
+reseau:e
+	reseau:is_a reseau:machine; reseau:linked_to reseau:c.
+
+reseau:f
+	reseau:is_a reseau:machine; reseau:linked_to reseau:e.
+	
+reseau:g
+	reseau:is_a reseau:machine; reseau:linked_to reseau:f.
+	
 reseau:user_a
 	reseau:linked_to reseau:a; reseau:is_a reseau:user; reseau:speaks_to reseau:user_b .
 	
 reseau:user_b
-	reseau:linked_to reseau:d; reseau:is_a reseau:user; reseau:speaks_to reseau:user_a .
+	reseau:linked_to reseau:g; reseau:is_a reseau:user; reseau:speaks_to reseau:user_a .
 	
 reseau:user_c
 	reseau:linked_to reseau:c; reseau:is_a reseau:user .
