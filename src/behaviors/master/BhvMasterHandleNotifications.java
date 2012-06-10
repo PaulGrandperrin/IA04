@@ -1,4 +1,4 @@
-package behaviors;
+package behaviors.master;
 
 import messages.AIDSerializer;
 import messages.ProtoPaquet;

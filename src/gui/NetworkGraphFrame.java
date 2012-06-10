@@ -26,6 +26,7 @@ public class NetworkGraphFrame extends JFrame implements Factory {
 	MasterAgent ag;
 
 	public VisualizationViewer<String,String> vv;
+	final Graph<String, String> g;
 	
 	public NetworkGraphFrame(final MasterAgent agent) {
 		super();
@@ -33,7 +34,7 @@ public class NetworkGraphFrame extends JFrame implements Factory {
 		this.setVisible(true);
 		this.ag = agent;
 		final QueryKnowledgeBase kb = new QueryKnowledgeBase("./network.n3");
-		final Graph<String, String> g = kb.getGraph();
+		g = kb.getGraph();
 		// The Layout<V, E> is parameterized by the vertex and edge types
 		Layout<String, String> layout = new CircleLayout<String, String>(g);
 		layout.setSize(new Dimension(300,300)); // sets the initial size of the space
