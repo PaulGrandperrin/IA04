@@ -3,6 +3,8 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Paint;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFrame;
 
@@ -11,6 +13,8 @@ import knowledgeBase.QueryKnowledgeBase;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
+
+import behaviors.master.UpdateSwitchLinks;
 
 import agents.MasterAgent;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
@@ -27,13 +31,14 @@ public class NetworkGraphFrame extends JFrame implements Factory {
 
 	public VisualizationViewer<String,String> vv;
 	final Graph<String, String> g;
+	final QueryKnowledgeBase kb;
 	
 	public NetworkGraphFrame(final MasterAgent agent) {
 		super();
 		this.setSize(640, 480);
 		this.setVisible(true);
 		this.ag = agent;
-		final QueryKnowledgeBase kb = new QueryKnowledgeBase("./network.n3");
+		kb = new QueryKnowledgeBase("./network.n3");
 		g = kb.getGraph();
 		// The Layout<V, E> is parameterized by the vertex and edge types
 		Layout<String, String> layout = new CircleLayout<String, String>(g);
@@ -77,11 +82,7 @@ public class NetworkGraphFrame extends JFrame implements Factory {
 		vv.setGraphMouse(gm);
 		*/
 		EditingModalGraphMouse<String, String> em = new EditingModalGraphMouse<String, String>(
-													    vv.getRenderContext(), new Factory<String>() {
-															public String create() {
-																return "Vertex_i";
-															}
-														}, this, 0, 0);
+													    vv.getRenderContext(), null, this, 0, 0);
 		vv.setGraphMouse(em);
 		this.getContentPane().add(vv);
 		this.pack();
@@ -90,9 +91,14 @@ public class NetworkGraphFrame extends JFrame implements Factory {
 	}
 
 	// gestion des edge
-	public Object create() {
+	public String create() {
 		System.out.println("asked to create an edge");
+		ag.addBehaviour(new UpdateSwitchLinks(this));
 		return "Edge-i";		
+	}
+	
+	public Map<String, List<String>> getLinks() {
+		return kb.getLinks(g);		
 	}
 	
 	
