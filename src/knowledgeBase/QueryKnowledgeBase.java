@@ -29,7 +29,7 @@ public class QueryKnowledgeBase {
 		computeGraph();
 	}
 
-	public Map<String, List<String>> getLinks() {
+	public Map<String, List<String>> getLinks(Graph<String, String> graph) {
 
 		Map<String, List<String>> h = new HashMap<String, List<String>>();
 
@@ -45,6 +45,10 @@ public class QueryKnowledgeBase {
 		return h;
 	}
 
+	public Map<String, List<String>> getLinks() {
+		return getLinks(graph);		
+	}
+	
 	public Map<String, KBMachine> getMap() {
 		return machineMap;
 	}	
