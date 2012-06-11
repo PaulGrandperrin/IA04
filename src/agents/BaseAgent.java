@@ -17,7 +17,7 @@ import jade.gui.GuiEvent;
 
 public abstract class BaseAgent extends GuiAgent {
 	private static final long serialVersionUID = 1L;
-	private List<String> LinkTable;
+	public List<String> LinkTable;
 	private GsonBuilder gsonb;
 
 	public BaseAgent() {

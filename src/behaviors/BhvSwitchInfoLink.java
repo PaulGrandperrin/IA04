@@ -40,6 +40,10 @@ public class BhvSwitchInfoLink extends CyclicBehaviour {
 
 			ProtoInfoLink infoLink = gson.fromJson(msg.getContent(), ProtoInfoLink.class);			
 			((BaseAgent)myAgent).setLinkTable(infoLink.links);
+			if(myAgent instanceof SwitchAgent)
+			{
+				myAgent.addBehaviour(new BhvSwitchIA((SwitchAgent)myAgent));
+			}
 		}
 	}
 
