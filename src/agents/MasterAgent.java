@@ -137,6 +137,6 @@ public class MasterAgent extends GuiAgent {
 	
 	public void logPaquet(ProtoPaquet p)
 	{
-		log("=== Paquet recu ===\tsrc: "+p.src+"\tdst: "+p.dest+"\tcon: "+p.content);
+		log("### Paquet recu ###\tsrc: "+p.src+"\tdst: "+p.dest+"\tcon: "+p.content);
 	}
 }

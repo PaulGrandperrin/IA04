@@ -20,7 +20,7 @@ public class ChatFrame extends JFrame {
 	private static int FRAME_WIDTH = 350;
 	private static int FRAME_HEIGHT = 350;
 	private static int frameNum = 0;
-	JTextField txtField;
+	JTextField txtField, txtFieldName;
 	JTextArea backlog;
 	JButton sendButton;
 	BorderLayout layout;
@@ -45,12 +45,18 @@ public class ChatFrame extends JFrame {
 //		pane.setDividerLocation(360);
 		
 		add(txtField, BorderLayout.NORTH);
+		
+		txtFieldName = new JTextField();
+		add(txtFieldName, BorderLayout.SOUTH);
+		txtFieldName.setText(myAgent.interlocuteur);
+		
 		add(scrollArea, BorderLayout.CENTER);
 		
 		txtField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				GuiEvent e = new GuiEvent(this, UserAgent.SEND_MESSAGE_EVENT);
-				e.addParameter(myAgent.getLocalName() + " dit : " + txtField.getText());				
+				e.addParameter(myAgent.getLocalName() + " dit : " + txtField.getText());
+				e.addParameter(txtFieldName.getText());	
 				txtField.setText("");
 				backlog.setText(backlog.getText() + "\n" + e.getParameter(0));
 				myAgent.postGuiEvent(e);

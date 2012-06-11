@@ -30,10 +30,9 @@ public class UserAgent extends BaseAgent {
 	public static String MSG_RECEIVED_PROP = "MSG_RECEIVED_PROP";
 	public static int SEND_MESSAGE_EVENT = 1;
 	public static int RECEIVED_MESSAGE_EVENT = 2;
+
+	public String interlocuteur;
 	
-	private String interlocuteur;
-
-
 	public UserAgent() {
 		changes = new PropertyChangeSupport(this);
 	}
@@ -56,11 +55,12 @@ public class UserAgent extends BaseAgent {
 			e.printStackTrace();
 		}
 		
-		frame = new ChatFrame(this);
-
 		Object[] args = getArguments();
 		interlocuteur = (String) args[0];
 		
+		frame = new ChatFrame(this);
+		
+
 		addBehaviour(new BhvSwitchInfoLink(this));
 		addBehaviour(new ChatReceptionBehaviour(this, 0));
 		
@@ -100,10 +100,8 @@ public class UserAgent extends BaseAgent {
 		
 		if (ev.getType() == SEND_MESSAGE_EVENT) {
 			String s = (String) ev.getParameter(0);
-						
-			if(interlocuteur != null) {				
-				this.addBehaviour(new SendMessageBehaviour(this.getLocalName(), interlocuteur, s));
-			}
+								
+			this.addBehaviour(new SendMessageBehaviour(this.getLocalName(), (String) ev.getParameter(1), s));
 		} else if (ev.getType() == RECEIVED_MESSAGE_EVENT) {
 				frame.addMessage((String) ev.getParameter(0));
 		}

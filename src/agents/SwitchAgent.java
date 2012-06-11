@@ -6,10 +6,15 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
+import sun.security.provider.MD5;
+
+import behaviors.BhvSwitchIA;
 import behaviors.BhvSwitchInfoLink;
 import behaviors.BhvSwitchPaquet;
 
@@ -22,6 +27,25 @@ public class SwitchAgent extends BaseAgent {
 
 	private List<String> LinkTable;
 	public Map<String, String> routeTable;
+	
+	/*
+	 * Spanning Tree Protocol related attributes
+	 */
+	
+	public Integer bridgeID;
+	public Integer rootID;
+	
+	/*
+	 * RP: root port
+	 * DP: designated port
+	 * NDP: non designated port
+	 * UNK: unknown
+	 */
+	public enum portState{RP, DP, NDP, UNK};
+	public Vector<portState> portStates;
+	
+	public enum switchState{BLOCKING,LISTENING, LEARNING, FORWARDING, DISABLED};
+	public switchState state;
 
 	protected void setup() {
 		log("initialisation");
@@ -38,9 +62,14 @@ public class SwitchAgent extends BaseAgent {
 		}
 		
 		routeTable=new HashMap<String, String>();
+		Object[] args = getArguments();
+		bridgeID = (Integer) args[0];
+		rootID=bridgeID;
+		portStates=new Vector<SwitchAgent.portState>();
 		
 		addBehaviour(new BhvSwitchInfoLink(this));
 		addBehaviour(new BhvSwitchPaquet(this));
+		addBehaviour(new BhvSwitchIA(this));
 	}
 
 	public AID searchMasterAgent() {

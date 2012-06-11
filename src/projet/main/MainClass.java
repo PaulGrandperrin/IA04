@@ -70,7 +70,7 @@ public class MainClass {
 			AgentController agent;
 			
 			if(machineMap.get(nom).machineType == KBMachine.type.SWITCH)
-				agent = ac.createNewAgent(nom, "agents.SwitchAgent", new Object[]{});
+				agent = ac.createNewAgent(nom, "agents.SwitchAgent", new Object[]{i});
 			else {
 				// FIXME: pas de vérification que l'agent avec qui on communique est déjà instancié.
 				agent = ac.createNewAgent(nom, "agents.UserAgent", new Object[]{machineMap.get(nom).interlocuteur});
