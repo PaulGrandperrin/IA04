@@ -34,6 +34,8 @@ public class BhvSwitchIA extends Behaviour {
 	public void action() {
 		
 
+		
+			myAgent.log("STP Etape 1: Envoie des BPDUs initiaux (bridgeID: "+myAgent.bridgeID+")");
 			//Je suis le switch racine (LOL)
 			//J'envoie des BPDUs à tout le monde
 			ProtoSTP stp=new ProtoSTP();
@@ -49,11 +51,13 @@ public class BhvSwitchIA extends Behaviour {
 			}
 			myAgent.send(msg);
 		
+			myAgent.log("STP Etape 2: Propagation des BPDUs et détermination du rootID");
 			
-			long time=new Date().getTime();
-			while((new Date().getTime())<time+5000) //Pendant 5 secondes
+			long time=new Date().getTime()+5000;
+			long time2=new Date().getTime();
+			while(time2<time) //Pendant 2 secondes
 			{
-				//Maintenant, j'attend des BPDUs pendant 5 secondes
+				//Maintenant, j'attend des BPDUs pendant 2 secondes
 				msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.PROPAGATE));
 				if(msg!=null)
 				{
@@ -62,6 +66,7 @@ public class BhvSwitchIA extends Behaviour {
 					// Je met à jour le rootID si nécéssaire
 					if(mess.type.equals("BPDU")&&mess.rootID<myAgent.rootID)
 					{
+						myAgent.log("STP Etape 2: Reception d'un BPDU: "+mess.rootID);
 						myAgent.rootID=mess.rootID;
 						//Ce BPDU m'a été utile, il peut l'être aussi pour mes voisins
 						
@@ -78,17 +83,29 @@ public class BhvSwitchIA extends Behaviour {
 						myAgent.send(msg2);
 					}
 				}
+				time2=new Date().getTime();
 			}
 			
-			//On attend 5 sec
+			myAgent.log("STP Etape 2: Le rootID : "+myAgent.rootID);
+			
+			//On attend 2 sec
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
+			
 			if(myAgent.bridgeID==myAgent.rootID) // Si je suis le switch racine
 			{
+				//On attend 2 sec
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				myAgent.log("STP Etape 3: je suis le switch root, j'envoie une propagation 'PATHFINDING'");
 				//J'envoie un msg à tout le monde
 				stp=new ProtoSTP();
 				stp.type="PATHFINDING";
@@ -105,26 +122,103 @@ public class BhvSwitchIA extends Behaviour {
 			}
 			else
 			{
+				myAgent.log("STP Etape 3: je ne suis pas le switch root, je recoie et propage les paquets 'PATHFINDING'");
 				//J'attend un et un seul msg de pathfinding et je le transmet
+				Boolean cont=true;
+				while(cont)
+				{
+					msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.PROPAGATE));
+					if(msg!=null)
+					{
+						ProtoSTP mess = gson.fromJson(msg.getContent(), ProtoSTP.class);
+						
+						// Je met à jour le rootID si nécéssaire
+						if(mess.type.equals("PATHFINDING"))
+						{
+							myAgent.rootPort=msg.getSender().getLocalName();
+							//Puis je transmet le message
+							
+							ACLMessage msg2 = new ACLMessage(ACLMessage.PROPAGATE);
+							msg2.setContent(gson.toJson(mess));
+							for(String s:myAgent.LinkTable)
+							{
+								if(!s.equals(msg.getSender().getLocalName())) //On renvoie pas à l'envoyeur
+								{
+									msg2.addReceiver(myAgent.getAIDByName(s));
+									myAgent.addBehaviour(new BhvNotifyMaster(myAgent.getLocalName(), s));
+								}
+							}
+							myAgent.send(msg2);
+							cont=false;
+						}
+					}
+				}
+			}
+			
+			myAgent.log("STP Etape 3: Mon rootPort est "+ myAgent.rootPort);
+			
+			//On attend 2 sec
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			myAgent.log("STP Etape 4: Détermination des Determined Ports (Reverse Path Finding)");
+			
+			//Tout les switchs sauf le master envoie un paquet sur leur RootPort
+			
+			if(myAgent.bridgeID!=myAgent.rootID) // Si je ne suis pas le switch racine
+			{
+				stp=new ProtoSTP();
+				stp.type="REVERSEPATHFINDING";
+				
+				msg = new ACLMessage(ACLMessage.PROPAGATE);
+				msg.setContent(gson.toJson(stp));
+				
+				msg.addReceiver(myAgent.getAIDByName(myAgent.rootPort));
+				myAgent.addBehaviour(new BhvNotifyMaster(myAgent.getLocalName(), myAgent.rootPort));
+			
+				myAgent.send(msg);
+				myAgent.openedPorts.add(myAgent.rootPort);
+			}
+			
+			//On attend tout les msgs de REVERSEPATHFINDING pour ouvrir les ports associés
+			
+			time=new Date().getTime()+5000;
+			time2=new Date().getTime();
+			while(time2<time) //Pendant 2 secondes
+			{
 				msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.PROPAGATE));
 				if(msg!=null)
 				{
 					ProtoSTP mess = gson.fromJson(msg.getContent(), ProtoSTP.class);
-					
-					// Je met à jour le rootID si nécéssaire
-					if(mess.type.equals("PATHFINDING"))
+					if(mess.type.equals("REVERSEPATHFINDING"))
 					{
-						
+						myAgent.openedPorts.add(msg.getSender().getLocalName());
 					}
+				}
+				time2=new Date().getTime();
 			}
 			
-		
-		}
+			for(String s:myAgent.LinkTable)
+			{
+				if(s.contains("user"))
+				{
+					myAgent.openedPorts.add(s);
+				}
+				
+			}
+			
+			myAgent.log("STP Etape 5: Fin! "+myAgent.openedPorts);
+			
+			myAgent.addBehaviour(new BhvSwitchPaquet((SwitchAgent)myAgent));
+			
 	}
 
 	@Override
 	public boolean done() {
-		return false;
+		return true;
 	}
 
 }

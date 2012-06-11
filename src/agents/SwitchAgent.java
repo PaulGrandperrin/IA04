@@ -25,7 +25,6 @@ public class SwitchAgent extends BaseAgent {
 
 	private GsonBuilder gsonb;
 
-	public List<String> LinkTable;
 	public Map<String, String> routeTable;
 	
 	/*
@@ -35,14 +34,8 @@ public class SwitchAgent extends BaseAgent {
 	public Integer bridgeID;
 	public Integer rootID;
 	
-	/*
-	 * RP: root port
-	 * DP: designated port
-	 * NDP: non designated port
-	 * UNK: unknown
-	 */
-	public enum portState{RP, DP, NDP};
-	public Vector<portState> portStates;
+	public List<String> openedPorts;
+	public String rootPort;
 	
 
 	protected void setup() {
@@ -63,11 +56,14 @@ public class SwitchAgent extends BaseAgent {
 		Object[] args = getArguments();
 		bridgeID = (Integer) args[0];
 		rootID=bridgeID;
-		portStates=new Vector<SwitchAgent.portState>();
+		
+		openedPorts=new ArrayList<String>();
+		rootPort="";
+		
 		
 		addBehaviour(new BhvSwitchInfoLink(this));
-		addBehaviour(new BhvSwitchPaquet(this));
-		//addBehaviour(new BhvSwitchIA(this));
+		
+		
 	}
 
 	public AID searchMasterAgent() {
