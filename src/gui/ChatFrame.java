@@ -5,22 +5,21 @@ import jade.gui.GuiEvent;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JSplitPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import org.omg.PortableInterceptor.USER_EXCEPTION;
 
 import agents.UserAgent;
 
 public class ChatFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private static int FRAME_WIDTH = 350;
+	private static int FRAME_HEIGHT = 350;
+	private static int frameNum = 0;
 	JTextField txtField;
 	JTextArea backlog;
 	JButton sendButton;
@@ -31,15 +30,22 @@ public class ChatFrame extends JFrame {
 	public ChatFrame(UserAgent ag) {
 		super();
 		myAgent = ag;		
-				
+		setLayout(new BorderLayout());
+		initialize();
+//		frameNum++;
+	}
+	
+	private void initialize() {
 		backlog = new JTextArea();
+		backlog.setAutoscrolls(true);
 		backlog.setEditable(false);
-		
-		
+		JScrollPane scrollArea = new JScrollPane(backlog);
 		txtField = new JTextField();
+//		JSplitPane pane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, backlog, txtField);
+//		pane.setDividerLocation(360);
 		
-		JSplitPane pane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, backlog, txtField);
-		pane.setDividerLocation(360);
+		add(txtField, BorderLayout.NORTH);
+		add(scrollArea, BorderLayout.CENTER);
 		
 		txtField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -51,12 +57,17 @@ public class ChatFrame extends JFrame {
 			}
 		});
 
-		this.getContentPane().add(pane);
-		this.setTitle(myAgent.getName());
-		this.setSize(400, 400);
-		
+//		this.getContentPane().add(pane);
+		this.setTitle("Interface de " + myAgent.getLocalName());
+		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
-		this.setLocation(600, 200);
+		int newX = 400+(frameNum%2)*FRAME_WIDTH;
+		int newY = 50+(frameNum/2)*FRAME_HEIGHT;
+		frameNum++;
+		System.out.println("x : " + newX);
+		System.out.println("y: " + newY);
+		System.out.println();
+		this.setLocation(newX, newY);
 		this.setVisible(true);		
 	}
 
