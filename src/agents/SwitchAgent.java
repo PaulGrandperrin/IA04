@@ -25,7 +25,7 @@ public class SwitchAgent extends BaseAgent {
 
 	private GsonBuilder gsonb;
 
-	private List<String> LinkTable;
+	public List<String> LinkTable;
 	public Map<String, String> routeTable;
 	
 	/*
@@ -41,11 +41,9 @@ public class SwitchAgent extends BaseAgent {
 	 * NDP: non designated port
 	 * UNK: unknown
 	 */
-	public enum portState{RP, DP, NDP, UNK};
+	public enum portState{RP, DP, NDP};
 	public Vector<portState> portStates;
 	
-	public enum switchState{BLOCKING,LISTENING, LEARNING, FORWARDING, DISABLED};
-	public switchState state;
 
 	protected void setup() {
 		log("initialisation");
@@ -69,7 +67,7 @@ public class SwitchAgent extends BaseAgent {
 		
 		addBehaviour(new BhvSwitchInfoLink(this));
 		addBehaviour(new BhvSwitchPaquet(this));
-		addBehaviour(new BhvSwitchIA(this));
+		//addBehaviour(new BhvSwitchIA(this));
 	}
 
 	public AID searchMasterAgent() {

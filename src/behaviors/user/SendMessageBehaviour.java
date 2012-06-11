@@ -48,9 +48,8 @@ public class SendMessageBehaviour extends OneShotBehaviour {
 			myAgent.addBehaviour(new BhvNotifyMaster(this.src, linkedSwitch));
 		}
 		
-		System.out.println("msg: " + msg.getContent());
 		
-		System.out.println("have Receiver: " + msg.getAllReceiver().hasNext());
+		
 		
 		myAgent.send(msg);
 	}
