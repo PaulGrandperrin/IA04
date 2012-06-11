@@ -44,7 +44,7 @@ public class SendMessageBehaviour extends OneShotBehaviour {
 		BaseAgent ag = (BaseAgent) myAgent; 
 		for(String linkedSwitch:ag.getLinkTable()) {
 			//if(dst.equals(sender)) continue;
-			msg.addReceiver(ag.getSwitchAID(linkedSwitch));			
+			msg.addReceiver(ag.getAIDByName(linkedSwitch));			
 			myAgent.addBehaviour(new BhvNotifyMaster(this.src, linkedSwitch));
 		}
 		

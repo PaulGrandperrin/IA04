@@ -18,8 +18,9 @@ import java.util.Map;
 import messages.ProtoInfoLink;
 import messages.ProtoPaquet;
 import atlas.lib.Pair;
-import behaviors.BhvMasterHandleNotifications;
 import behaviors.GUIUpdateBehaviour;
+import behaviors.master.BhvMasterHandleNotifications;
+import behaviors.master.UpdateSwitchLinks;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -60,21 +61,8 @@ public class MasterAgent extends GuiAgent {
 		
 		addBehaviour(new GUIUpdateBehaviour(this, 1000, gui.vv));
 		addBehaviour(new BhvMasterHandleNotifications());
-		
-		gsonb = new GsonBuilder();
 
-		Gson gson = gsonb.create();
-		for(String agentName : graphAgent.keySet()){
-			AID agent = getAIDByName(agentName);
-			ACLMessage jadeMsg = new ACLMessage(ACLMessage.INFORM);
-			jadeMsg.addReceiver(agent);
-			ProtoInfoLink infoLink = new ProtoInfoLink();
-			infoLink.links = graphAgent.get(agentName);
-			jadeMsg.setContent(gson.toJson(infoLink));
-			log("envoie de la liste des liens à "+agentName);
-			send(jadeMsg);
-		}
-
+		addBehaviour(new UpdateSwitchLinks(graphAgent));
 	}
 
 
@@ -101,7 +89,7 @@ public class MasterAgent extends GuiAgent {
 		}
 	}
 
-	private AID getAIDByName(String name)
+	public AID getAIDByName(String name)
 	{
 		DFAgentDescription dfd = new DFAgentDescription();
 		ServiceDescription sd  = new ServiceDescription();
