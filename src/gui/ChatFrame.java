@@ -20,7 +20,8 @@ public class ChatFrame extends JFrame {
 	private static int FRAME_WIDTH = 350;
 	private static int FRAME_HEIGHT = 350;
 	private static int frameNum = 0;
-	JTextField txtField, txtFieldName;
+	private static int numFramePerRow = 2;
+	JTextField txtField, txtFieldDestName;
 	JTextArea backlog;
 	JButton sendButton;
 	BorderLayout layout;
@@ -46,19 +47,19 @@ public class ChatFrame extends JFrame {
 		
 		add(txtField, BorderLayout.NORTH);
 		
-		txtFieldName = new JTextField();
-		add(txtFieldName, BorderLayout.SOUTH);
-		txtFieldName.setText(myAgent.interlocuteur);
+		txtFieldDestName = new JTextField();
+		add(txtFieldDestName, BorderLayout.SOUTH);
+		txtFieldDestName.setText(myAgent.interlocuteur);
 		
 		add(scrollArea, BorderLayout.CENTER);
 		
 		txtField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				GuiEvent e = new GuiEvent(this, UserAgent.SEND_MESSAGE_EVENT);
-				e.addParameter(myAgent.getLocalName() + " dit : " + txtField.getText());
-				e.addParameter(txtFieldName.getText());	
+				e.addParameter("<-- " + myAgent.getLocalName() + " dit : " + txtField.getText());
+				e.addParameter(txtFieldDestName.getText());	
+				backlog.setText(backlog.getText() + "\n --> à " + txtFieldDestName.getText() + " : " + txtField.getText());
 				txtField.setText("");
-				backlog.setText(backlog.getText() + "\n" + e.getParameter(0));
 				myAgent.postGuiEvent(e);
 			}
 		});
@@ -67,8 +68,8 @@ public class ChatFrame extends JFrame {
 		this.setTitle("Interface de " + myAgent.getLocalName());
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
-		int newX = 400+(frameNum%2)*FRAME_WIDTH;
-		int newY = 50+(frameNum/2)*FRAME_HEIGHT;
+		int newX = 400+(frameNum%numFramePerRow)*FRAME_WIDTH;
+		int newY = (frameNum/numFramePerRow)*FRAME_HEIGHT;
 		frameNum++;
 		System.out.println("x : " + newX);
 		System.out.println("y: " + newY);
