@@ -38,11 +38,12 @@ public class NetworkGraphFrame extends JFrame implements Factory {
 		this.setSize(640, 480);
 		this.setVisible(true);
 		this.ag = agent;
-		kb = new QueryKnowledgeBase("./network.n3");
+		//kb = new QueryKnowledgeBase("./network.n3");
+		kb = new QueryKnowledgeBase(QueryKnowledgeBase.KB_FILE_PATH);
 		g = kb.getGraph();
 		// The Layout<V, E> is parameterized by the vertex and edge types
 		Layout<String, String> layout = new CircleLayout<String, String>(g);
-		layout.setSize(new Dimension(300,300)); // sets the initial size of the space
+		layout.setSize(new Dimension(600,500)); // sets the initial size of the space
 		// The BasicVisualizationServer<V,E> is parameterized by the edge types
 		vv = new VisualizationViewer<String,String>(layout);
 		
@@ -72,7 +73,7 @@ public class NetworkGraphFrame extends JFrame implements Factory {
 		};
 		vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint);
 		
-		vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
+		vv.setPreferredSize(new Dimension(700,550)); //Sets the viewing area size
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
 		vv.getRenderContext().setEdgeDrawPaintTransformer(edgePaint);
 		
@@ -90,11 +91,12 @@ public class NetworkGraphFrame extends JFrame implements Factory {
 
 	}
 
+	int i = 0;
 	// gestion des edge
 	public String create() {
 		System.out.println("asked to create an edge");
 		ag.addBehaviour(new UpdateSwitchLinks(this));
-		return "Edge-i";		
+		return "Edge-" + (++i);		
 	}
 	
 	public Map<String, List<String>> getLinks() {

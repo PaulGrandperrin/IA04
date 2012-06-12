@@ -29,7 +29,9 @@ public class MainClass {
 			AgentContainer mainC = rt.createMainContainer(p);
 			
 			//Lancement des agents switch
-			Map<String, List<String>> graphAgent=createSwitchsFromOntologie(mainC,"./network.n3");
+			//Map<String, List<String>> graphAgent=createSwitchsFromOntologie(mainC,"./network.n3");
+			Map<String, List<String>> graphAgent=createSwitchsFromOntologie(mainC,QueryKnowledgeBase.KB_FILE_PATH);
+			
 			
 			
 			//Lancement de l'agent master avec en argument la liste des agents switch+ leurs liens.
