@@ -79,8 +79,8 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 			else //L'adresse de destination n'est pas dans la table de routage => on broadcast
 			{
 			
-				//for(String dst:((SwitchAgent)myAgent).openedPorts) // AVEC SPANNING TREE 
-				for(String dst:((SwitchAgent)myAgent).LinkTable) //  SANS SPANNING TREE 
+				for(String dst:((SwitchAgent)myAgent).openedPorts) // AVEC SPANNING TREE 
+				//for(String dst:((SwitchAgent)myAgent).LinkTable) 	//  SANS SPANNING TREE
 				{
 					if(dst.equals(sender) || dst.equals(p.src)) continue;
 					myAgent.log("transmission du paquet (broadcast) à "+dst);

@@ -59,8 +59,8 @@ public class BhvSwitchInfoLink extends CyclicBehaviour {
 				
 				((SwitchAgent) myAgent).rootID =((SwitchAgent) myAgent).bridgeID;
 				
-				//myAgent.addBehaviour(new BhvSwitchIA((SwitchAgent)myAgent)); ///// AVEC STP
-				myAgent.addBehaviour(new BhvSwitchPaquet((SwitchAgent)myAgent));//   SANS STP
+				myAgent.addBehaviour(new BhvSwitchIA((SwitchAgent)myAgent)); ///// AVEC STP
+				//myAgent.addBehaviour(new BhvSwitchPaquet((SwitchAgent)myAgent));//   SANS STP
 			}
 		}
 	}

@@ -20,8 +20,8 @@ import edu.uci.ics.jung.graph.SparseMultigraph;
 
 public class QueryKnowledgeBase {
 
-	public static String KB_FILE_PATH = "./network.n3";
-	//public static String KB_FILE_PATH = "./demoNetwork.n3";
+	//public static String KB_FILE_PATH = "./network.n3";
+	public static String KB_FILE_PATH = "./demoNetwork.n3";
 	String fileName;
 	Map<String, KBMachine> machineMap = new HashMap<String, KBMachine>(); 
 	Graph<String, String> graph = new SparseMultigraph<String, String>();

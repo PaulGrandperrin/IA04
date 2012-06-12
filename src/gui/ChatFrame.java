@@ -17,8 +17,8 @@ import agents.UserAgent;
 public class ChatFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static int FRAME_WIDTH = 350;
-	private static int FRAME_HEIGHT = 350;
+	private static int FRAME_WIDTH = 250;
+	private static int FRAME_HEIGHT = 250;
 	private static int frameNum = 0;
 	private static int numFramePerRow = 2;
 	JTextField txtField, txtFieldDestName;
@@ -56,19 +56,19 @@ public class ChatFrame extends JFrame {
 		txtField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				GuiEvent e = new GuiEvent(this, UserAgent.SEND_MESSAGE_EVENT);
-				e.addParameter("<-- " + myAgent.getLocalName() + " dit : " + txtField.getText());
+				e.addParameter("< " + myAgent.getLocalName() + " : " + txtField.getText());
 				e.addParameter(txtFieldDestName.getText());	
-				backlog.setText(backlog.getText() + "\n --> à " + txtFieldDestName.getText() + " : " + txtField.getText());
+				backlog.setText(backlog.getText() + "\n> " + txtFieldDestName.getText() + " : " + txtField.getText());
 				txtField.setText("");
 				myAgent.postGuiEvent(e);
 			}
 		});
 
 //		this.getContentPane().add(pane);
-		this.setTitle("Interface de " + myAgent.getLocalName());
+		this.setTitle(myAgent.getLocalName());
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
-		int newX = 400+(frameNum%numFramePerRow)*FRAME_WIDTH;
+		int newX = 500+(frameNum%numFramePerRow)*FRAME_WIDTH;
 		int newY = (frameNum/numFramePerRow)*FRAME_HEIGHT;
 		frameNum++;
 		System.out.println("x : " + newX);

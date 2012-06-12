@@ -1,68 +1,50 @@
 # Topologie reseau
 @prefix reseau:  <http://utc.fr/projetIA04reseau#> .
 
-
-reseau:Switch_A 
-	reseau:linked_to reseau:Switch_B; reseau:linked_to reseau:Switch_G; reseau:is_a reseau:machine.
+reseau:a 
+	reseau:is_a reseau:machine.
 	
-reseau:Switch_B
-    reseau:is_a reseau:machine .
+reseau:b
+    reseau:is_a reseau:machine; reseau:linked_to reseau:a .
     
-reseau:Switch_C
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_B.
-    
-    
-reseau:Switch_D
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_A; reseau:linked_to reseau:Switch_J.
-    
-reseau:Switch_E
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_C.
+reseau:c
+    reseau:is_a reseau:machine;reseau:linked_to reseau:a; reseau:linked_to reseau:b.
 
-reseau:Switch_F
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_E; reseau:linked_to reseau:Switch_M.
+reseau:d
+    reseau:is_a reseau:machine; reseau:linked_to reseau:a;reseau:linked_to reseau:b;reseau:linked_to reseau:c.
+    
+reseau:e
+    reseau:is_a reseau:machine; reseau:linked_to reseau:a;reseau:linked_to reseau:b;reseau:linked_to reseau:c; reseau:linked_to reseau:e.
     
     
-reseau:Switch_G
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_E.
+reseau:aa
+    reseau:is_a reseau:machine; reseau:linked_to reseau:a.
     
-    
-reseau:Switch_H
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_D; reseau:linked_to reseau:Switch_G.
-    
-    
-reseau:Switch_I
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_G; reseau:linked_to reseau:Switch_E.
-    
-    
-reseau:Switch_J
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_B; reseau:linked_to reseau:Switch_G.
-    
-reseau:Switch_K
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_A; reseau:linked_to reseau:Switch_F.
+reseau:bb
+    reseau:is_a reseau:machine; reseau:linked_to reseau:aa.
+ 
+reseau:cc
+    reseau:is_a reseau:machine;reseau:linked_to reseau:aa; reseau:linked_to reseau:bb.
 
-reseau:Switch_L
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_C.
+reseau:dd
+    reseau:is_a reseau:machine; reseau:linked_to reseau:aa;reseau:linked_to reseau:bb;reseau:linked_to reseau:cc.
     
-reseau:Switch_M
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_G.
-   
-reseau:Switch_O
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_G; reseau:linked_to reseau:Switch_I. 
+reseau:ee
+    reseau:is_a reseau:machine; reseau:linked_to reseau:aa;reseau:linked_to reseau:bb;reseau:linked_to reseau:cc; reseau:linked_to reseau:ee.
     
-reseau:Switch_P
-    reseau:is_a reseau:machine; reseau:linked_to reseau:Switch_C.
-    
-    
+  
 
-    
-reseau:Pierrick 
-	reseau:linked_to reseau:Switch_F; reseau:is_a reseau:user; reseau:speaks_to reseau:Karim.
+reseau:user_Paul
+	reseau:linked_to reseau:a; reseau:is_a reseau:user; reseau:speaks_to reseau:user_Matthieu.
 	
-reseau:Karim
-	reseau:linked_to reseau:Switch_G; reseau:is_a reseau:user; reseau:speaks_to reseau:Matthieu.
+reseau:user_Matthieu
+	reseau:linked_to reseau:b; reseau:is_a reseau:user; reseau:speaks_to reseau:user_Pierrick.
 	
-reseau:Matthieu
-	reseau:linked_to reseau:Switch_I; reseau:is_a reseau:user; reseau:speaks_to reseau:Pierrick.
+reseau:user_Pierrick
+	reseau:linked_to reseau:cc; reseau:is_a reseau:user; reseau:speaks_to reseau:user_Karim.
+
+reseau:user_Karim
+	reseau:linked_to reseau:dd; reseau:is_a reseau:user; reseau:speaks_to reseau:user_Paul.
 	
 # reseau:a 
 # 	reseau:linked_to reseau:b; reseau:is_a reseau:machine .
@@ -97,3 +79,4 @@ reseau:Matthieu
 #    USER_B -- D -- A -- USER_A
 #                   |
 #                   B -- C -- USER_C
+
