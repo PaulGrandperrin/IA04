@@ -32,8 +32,13 @@ public class BhvMasterHandleNotifications extends CyclicBehaviour {
 		 
 		if (msg != null) {			
 			ProtoPaquet mess = gson.fromJson(msg.getContent(), ProtoPaquet.class);
-			Pair<String, String> p = new Pair<String, String>(mess.src, mess.dest);
-			ag.pushPair(p);
+			if(mess.stp) {
+				Pair<String, String> p = new Pair<String, String>(mess.src, mess.dest);
+				ag.pushStp(p);
+			} else {
+				Pair<String, String> p = new Pair<String, String>(mess.src, mess.dest);
+				ag.pushPair(p);
+			}
 		}
 		
 

@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import messages.AIDSerializer;
 import messages.ProtoPaquet;
 import messages.ProtoSTP;
+import agents.BaseAgent;
 import agents.SwitchAgent;
 import agents.UserAgent;
 import jade.core.AID;
@@ -212,7 +213,24 @@ public class BhvSwitchIA extends Behaviour {
 			
 			myAgent.log("STP Etape 5: Fin! "+myAgent.openedPorts);
 			
-			myAgent.addBehaviour(new BhvSwitchPaquet((SwitchAgent)myAgent));
+			for(String port:myAgent.openedPorts)
+			{
+				AID mAID = myAgent.getMasterAID();
+				// met les infos dans un protopaquet. cela évite d'avoir à créer une nouvelle structure
+				// pour encapsuler les données.
+				ProtoPaquet paquet = new ProtoPaquet();
+				paquet.src = myAgent.getLocalName();
+				paquet.dest = port;
+				paquet.stp = true;
+				
+				msg = new ACLMessage(ACLMessage.INFORM);
+				msg.addReceiver(mAID);
+				msg.setContent(gson.toJson(paquet));
+				
+				myAgent.send(msg);
+				
+				myAgent.addBehaviour(new BhvSwitchPaquet((SwitchAgent)myAgent));
+			}
 			
 	}
 

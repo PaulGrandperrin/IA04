@@ -32,6 +32,7 @@ public class UpdateSwitchLinks extends OneShotBehaviour {
 
 	public void action() {
 		MasterAgent ag = (MasterAgent) myAgent;
+		ag.clearStp();
 		GsonBuilder gsonb = new GsonBuilder();
 		if(ng != null) {
 			links = ng.getLinks();

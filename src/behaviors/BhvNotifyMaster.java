@@ -36,6 +36,7 @@ public class BhvNotifyMaster extends OneShotBehaviour {
 		ProtoPaquet paquet = new ProtoPaquet();
 		paquet.src = src;
 		paquet.dest = dest;
+		paquet.stp = false;
 		
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.addReceiver(mAID);

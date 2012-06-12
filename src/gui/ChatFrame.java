@@ -68,7 +68,7 @@ public class ChatFrame extends JFrame {
 		this.setTitle(myAgent.getLocalName());
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
-		int newX = 500+(frameNum%numFramePerRow)*FRAME_WIDTH;
+		int newX = 850+(frameNum%numFramePerRow)*FRAME_WIDTH;
 		int newY = (frameNum/numFramePerRow)*FRAME_HEIGHT;
 		frameNum++;
 		System.out.println("x : " + newX);

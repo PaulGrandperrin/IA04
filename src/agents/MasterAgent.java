@@ -31,11 +31,13 @@ public class MasterAgent extends GuiAgent {
 	private GsonBuilder gsonb;
 	private Map<String, List<String>> graphAgent;
 	private List<Pair<String, String>> displayedConnections;
+	private List<Pair<String, String>> stpEdges;
 	
 	@SuppressWarnings("unchecked")
 	protected void setup() {
 		log("initialisation");
 		displayedConnections = new ArrayList();
+		stpEdges = new ArrayList();
 		
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
@@ -111,6 +113,16 @@ public class MasterAgent extends GuiAgent {
 			displayedConnections.add(p);
 		//}
 	}
+
+	public void pushStp(Pair<String, String> p) {
+		//synchronized (this) {	
+		stpEdges.add(p);
+		//}
+	}
+	
+	public void clearStp() {
+		stpEdges.clear();
+	}
 	
 	public void clearDisplayedConnections() {
 		synchronized (this) {
@@ -124,6 +136,17 @@ public class MasterAgent extends GuiAgent {
 			Pair<String, String> p = displayedConnections.get(i);
 			if((p.car().equals(first) && p.cdr().equals(second)) ||
 			   (p.car().equals(second) && p.cdr().equals(first))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public boolean connectionStp(String first, String second) {
+		// scan les connections affiches au cas
+		for(int i = 0; i < stpEdges.size(); i++) {
+			Pair<String, String> p = stpEdges.get(i);
+			if((p.car().equals(first) && p.cdr().equals(second)) ||
+					(p.car().equals(second) && p.cdr().equals(first))) {
 				return true;
 			}
 		}

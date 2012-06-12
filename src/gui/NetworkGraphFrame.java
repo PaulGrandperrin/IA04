@@ -64,10 +64,13 @@ public class NetworkGraphFrame extends JFrame implements Factory {
 		Transformer<String,Paint> edgePaint = new Transformer<String,Paint>() {
 			public Paint transform(String s) {
 				Pair<String> p = g.getEndpoints(s);
-				
+
 				if(agent.connectionBetweenEdges(p.getFirst(), p.getSecond())) {
 					return Color.red;
 				} else
+					if(agent.connectionStp(p.getFirst(), p.getSecond())) {
+						return Color.blue;
+					}
 					return Color.black;
 			}
 		};
