@@ -6,7 +6,9 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 
 import javax.media.j3d.Behavior;
 
@@ -42,7 +44,23 @@ public class BhvSwitchInfoLink extends CyclicBehaviour {
 			((BaseAgent)myAgent).setLinkTable(infoLink.links);
 			if(myAgent instanceof SwitchAgent)
 			{
-				myAgent.addBehaviour(new BhvSwitchIA((SwitchAgent)myAgent));
+				if(((SwitchAgent) myAgent).ia!=null)
+				{
+					myAgent.removeBehaviour(((SwitchAgent) myAgent).ia);
+				}
+				if(((SwitchAgent) myAgent).switchPaquet!=null)
+				{
+					myAgent.removeBehaviour(((SwitchAgent) myAgent).switchPaquet);
+				}
+				
+				((SwitchAgent) myAgent).routeTable=new HashMap<String, String>();
+				((SwitchAgent) myAgent).openedPorts=new ArrayList<String>();
+				((SwitchAgent) myAgent).rootPort="";
+				
+				((SwitchAgent) myAgent).rootID =((SwitchAgent) myAgent).bridgeID;
+				
+				//myAgent.addBehaviour(new BhvSwitchIA((SwitchAgent)myAgent)); ///// AVEC STP
+				myAgent.addBehaviour(new BhvSwitchPaquet((SwitchAgent)myAgent));//   SANS STP
 			}
 		}
 	}

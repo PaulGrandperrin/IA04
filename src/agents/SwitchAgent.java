@@ -1,6 +1,7 @@
 package agents;
 
 import jade.core.AID;
+import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -11,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+
+import javax.media.j3d.Behavior;
 
 import sun.security.provider.MD5;
 
@@ -26,6 +29,10 @@ public class SwitchAgent extends BaseAgent {
 	private GsonBuilder gsonb;
 
 	public Map<String, String> routeTable;
+	
+	public Behaviour ia=null;
+
+	public Behaviour switchPaquet=null;
 	
 	/*
 	 * Spanning Tree Protocol related attributes

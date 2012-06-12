@@ -33,7 +33,7 @@ public class BhvSwitchIA extends Behaviour {
 	@Override
 	public void action() {
 		
-
+		
 		
 			myAgent.log("STP Etape 1: Envoie des BPDUs initiaux (bridgeID: "+myAgent.bridgeID+")");
 			//Je suis le switch racine (LOL)
@@ -53,9 +53,9 @@ public class BhvSwitchIA extends Behaviour {
 		
 			myAgent.log("STP Etape 2: Propagation des BPDUs et détermination du rootID");
 			
-			long time=new Date().getTime()+5000;
+			long time=new Date().getTime()+1000;
 			long time2=new Date().getTime();
-			while(time2<time) //Pendant 2 secondes
+			while(time2<time) //Pendant 1 secondes
 			{
 				//Maintenant, j'attend des BPDUs pendant 2 secondes
 				msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.PROPAGATE));
@@ -90,7 +90,7 @@ public class BhvSwitchIA extends Behaviour {
 			
 			//On attend 2 sec
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -100,7 +100,7 @@ public class BhvSwitchIA extends Behaviour {
 			{
 				//On attend 2 sec
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -159,7 +159,7 @@ public class BhvSwitchIA extends Behaviour {
 			
 			//On attend 2 sec
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -185,7 +185,7 @@ public class BhvSwitchIA extends Behaviour {
 			
 			//On attend tout les msgs de REVERSEPATHFINDING pour ouvrir les ports associés
 			
-			time=new Date().getTime()+5000;
+			time=new Date().getTime()+1000;
 			time2=new Date().getTime();
 			while(time2<time) //Pendant 2 secondes
 			{

@@ -25,8 +25,6 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 		myAgent.log("création du behavior SwitchPaquet");
 		gsonb = new GsonBuilder();
 		gsonb.registerTypeAdapter(AID.class, new AIDSerializer());
-		
-		
 	}
 
 //	private void answer(ACLMessage msg) {
@@ -81,7 +79,8 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 			else //L'adresse de destination n'est pas dans la table de routage => on broadcast
 			{
 			
-				for(String dst:((SwitchAgent)myAgent).openedPorts)
+				//for(String dst:((SwitchAgent)myAgent).openedPorts) // AVEC SPANNING TREE 
+				for(String dst:((SwitchAgent)myAgent).LinkTable) //  SANS SPANNING TREE 
 				{
 					if(dst.equals(sender) || dst.equals(p.src)) continue;
 					myAgent.log("transmission du paquet (broadcast) à "+dst);
@@ -102,6 +101,5 @@ public class BhvSwitchPaquet extends CyclicBehaviour {
 				}
 			}
 		}
-		
 	}
 }
